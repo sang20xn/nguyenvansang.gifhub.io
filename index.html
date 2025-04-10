@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ cá nhân của Sáng</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle, #1a237e, #000000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        .profile-container {
+            max-width: 800px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffeb3b;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        p {
+            font-size: 1.2rem;
+            margin: 15px 0;
+            color: #fff;
+            line-height: 1.8;
+            position: relative;
+            z-index: 2;
+        }
+        .quote {
+            font-style: italic;
+            color: #ff9800;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+        .contact-links a {
+            text-decoration: none;
+            color: #ffeb3b;
+            font-weight: bold;
+            font-size: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+        .contact-links a:hover {
+            color: #ff9800;
+        }
+        .contact-links {
+            margin-top: 15px;
+        }
+        .background-circles {
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            z-index: 1;
+            animation: circleMove 8s infinite ease-in-out;
+        }
+        .background-circles:nth-child(2) {
+            top: unset;
+            bottom: -50px;
+            left: unset;
+            right: -50px;
+            background: rgba(255, 255, 255, 0.2);
+            animation-duration: 10s;
+        }
+        @keyframes circleMove {
+            0%, 100% {
+            transform: translateY(0);
+            }
+            50% {
+            transform: translateY(20px);
+            }
+        }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% {
+            opacity: 0.8;
+            }
+            50% {
+            opacity: 0.2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="background-circles"></div>
+        <div class="background-circles"></div>
+        <h1 style="color: #ffeb3b;">✨ Hồ sơ cá nhân của Sáng ✨</h1>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="Cờ Việt Nam" style="width: 150px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); margin: 20px 0;">
+        <p style="color: #000; font-weight: bold; margin-top: 10px;">"Không có gì quý hơn độc lập, tự do!"</p>
+        <p style="color: #000; font-weight: bold;">"Đoàn kết, đoàn kết, đại đoàn kết. Thành công, thành công, đại thành công."</p>
+        <p style="color: #000;"><strong>🌟 Giới thiệu:</strong> Một người đầy nhiệt huyết, đam mê khám phá thế giới và tìm kiếm sự sáng tạo trong mọi khía cạnh của cuộc sống.</p>
+        <p style="color: #000;"><strong>🎨 Sở thích:</strong> Nghệ thuật, âm nhạc, sáng tác, khám phá thiên nhiên, văn hóa.</p>
+        <p style="color: #000;"><strong>🎯 Mục tiêu cá nhân:</strong> Xây dựng sự nghiệp theo đam mê, liên tục học hỏi, lan tỏa năng lượng tích cực.</p>
+        <p class="quote" style="color: #ff9800;">"🌈 Hãy sống như thể hôm nay là ngày tuyệt vời nhất trong cuộc đời bạn. 🌈"</p>
+        <div class="contact-links">
+            <p style="color: #000;"><strong>📬 Thông tin liên hệ:</strong></p>
+            <p style="color: #000;">Email: <a href="mailto:nguyenvansang02052005@gmail.com" style="color: #000;">nguyenvansang02052005@gmail.com</a></p>
+            <p style="color: #000;">Mạng xã hội: <a href="[liên kết mạng xã hội]" style="color: #000;">Nguyễn Văn Sáng</a></p>
+        </div>
+    </div>
+</body>
+<script>
+    const createFallingSnowflake = () => {
+        const snowflake = document.createElement('div');
+        snowflake.innerHTML = '❄️';
+        snowflake.style.position = 'fixed';
+        snowflake.style.left = Math.random() * window.innerWidth + 'px';
+        snowflake.style.top = '-50px';
+        snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+        snowflake.style.opacity = Math.random() * 0.5 + 0.5;
+        snowflake.style.animation = `fall ${Math.random() * 3 + 5}s linear infinite`;
+        snowflake.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+        document.body.appendChild(snowflake);
+
+        snowflake.addEventListener('animationend', () => {
+            snowflake.remove();
+        });
+    };
+
+    setInterval(createFallingSnowflake, 300);
+
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+<script>
+    const createTwinklingStar = () => {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        star.style.left = Math.random() * window.innerWidth + 'px';
+        star.style.top = Math.random() * window.innerHeight + 'px';
+        star.style.width = '10px'; // Increase size for a bigger star
+        star.style.height = '10px'; // Increase size for a bigger star
+        star.style.animationDuration = Math.random() * 2 + 1 + 's';
+
+        document.body.appendChild(star);
+
+        setTimeout(() => {
+            star.remove();
+        }, 3000);
+    };
+
+    setInterval(createTwinklingStar, 200);
+</script>
+</html>
