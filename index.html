@@ -4,20 +4,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style></style>
+    <title>Dynamic Heart Animation</title>
+    <style>
         canvas {
             position: absolute;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, .2);
+            background: radial-gradient(circle at center, #1a2a6c, #b21f1f, #fdbb2d);
         }
+        .text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            font-weight: bold;
+            color: rgba(255, 0, 0, 0);
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .text.visible {
+            color: rgba(255, 0, 0, 1);
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+    </style>
     </style>
 </head>
 <body>
     <canvas id="heart"></canvas>
+    <div id="text" class="text">Yêu Em</div>
     <script>
         window.requestAnimationFrame =
             window.__requestAnimationFrame ||
@@ -39,6 +56,32 @@
                 };
             })();
 
+        // Add glowing effect to the text
+        var textElement = document.getElementById('text');
+        var hue = 0;
+
+        function animateTextGlow() {
+            hue += 1;
+            textElement.style.textShadow = `
+                0 0 10px hsl(${hue}, 100%, 70%),
+                0 0 20px hsl(${hue}, 100%, 70%),
+                0 0 30px hsl(${hue}, 100%, 70%),
+                0 0 40px hsl(${hue}, 100%, 70%)
+            `;
+            if (hue >= 360) hue = 0;
+            requestAnimationFrame(animateTextGlow);
+        }
+
+        // Trigger text visibility on heart pulse
+        function toggleTextVisibility(isVisible) {
+            if (isVisible) {
+                textElement.classList.add('visible');
+            } else {
+                textElement.classList.remove('visible');
+            }
+        }
+
+        animateTextGlow();
         window.isDevice = (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(((navigator.userAgent || navigator.vendor || window.opera)).toLowerCase()));
 
         var loaded = false;
@@ -62,24 +105,24 @@
             ctx.fillRect(0, 0, width, height);
 
             var heartPosition = function (rad) {
-                return [Math.pow(Math.sin(rad), 3), -(15 * Math.cos(rad) - 5 * Math.cos(2 * rad) - 2 * Math.cos(3 * rad) - Math.cos(4 * rad))];
+            return [Math.pow(Math.sin(rad), 3), -(15 * Math.cos(rad) - 5 * Math.cos(2 * rad) - 2 * Math.cos(3 * rad) - Math.cos(4 * rad))];
             };
 
             var scaleAndTranslate = function (pos, sx, sy, dx, dy) {
-                return [dx + pos[0] * sx, dy + pos[1] * sy];
+            return [dx + pos[0] * sx, dy + pos[1] * sy];
             };
 
             window.addEventListener('resize', function () {
-                width = canvas.width = koef * innerWidth;
-                height = canvas.height = koef * innerHeight;
-                ctx.fillStyle = "rgba(0,0,0,1)";
-                ctx.fillRect(0, 0, width, height);
+            width = canvas.width = koef * innerWidth;
+            height = canvas.height = koef * innerHeight;
+            ctx.fillStyle = "rgba(0,0,0,1)";
+            ctx.fillRect(0, 0, width, height);
             });
 
             var traceCount = mobile ? 20 : 50;
             var pointsOrigin = [];
             var i;
-            var dr = mobile ? 0.3 : 0.1;
+            var dr = mobile ? 0.3 : 0.05; // Decrease step to create more points
 
             for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 210, 13, 0, 0));
             for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 150, 9, 0, 0));
@@ -89,89 +132,161 @@
             var targetPoints = [];
 
             var pulse = function (kx, ky) {
-                for (i = 0; i < pointsOrigin.length; i++) {
-                    targetPoints[i] = [];
-                    targetPoints[i][0] = kx * pointsOrigin[i][0] + width / 2;
-                    targetPoints[i][1] = ky * pointsOrigin[i][1] + height / 2;
-                }
+            for (i = 0; i < pointsOrigin.length; i++) {
+            targetPoints[i] = [];
+            targetPoints[i][0] = kx * pointsOrigin[i][0] + width / 2;
+            targetPoints[i][1] = ky * pointsOrigin[i][1] + height / 2;
+            }
             };
 
             var e = [];
             for (i = 0; i < heartPointsCount; i++) {
-                var x = rand() * width;
-                var y = rand() * height;
-                e[i] = {
-                    vx: 0,
-                    vy: 0,
-                    R: 2,
-                    speed: rand() + 5,
-                    q: ~~(rand() * heartPointsCount),
-                    D: 2 * (i % 2) - 1,
-                    force: 0.2 * rand() + 0.7,
-                    f: "hsla(0," + ~~(40 * rand() + 60) + "%," + ~~(60 * rand() + 20) + "%,.3)",
-                    trace: []
-                };
-                for (var k = 0; k < traceCount; k++) e[i].trace[k] = { x: x, y: y };
+            var x = rand() * width;
+            var y = rand() * height;
+            e[i] = {
+            vx: 0,
+            vy: 0,
+            R: 2,
+            speed: rand() + 5,
+            q: ~~(rand() * heartPointsCount),
+            D: 2 * (i % 2) - 1,
+            force: 0.2 * rand() + 0.7,
+            f: "hsla(" + (rand() * 360) + ", 100%, 70%, .3)", // Galaxy-like gradient colors
+            trace: [],
+            opacity: 1
+            };
+            for (var k = 0; k < traceCount; k++) e[i].trace[k] = { x: x, y: y };
+            }
+
+            // Small hearts
+            var smallHearts = [];
+            for (i = 0; i < 50; i++) { // Increase the number of small hearts
+            smallHearts.push({
+            x: rand() * width,
+            y: rand() * height,
+            size: rand() * 10 + 5,
+            speedX: rand() * 2 - 1,
+            speedY: rand() * 2 - 1,
+            color: "hsla(" + (rand() * 360) + ", 100%, 70%, .8)" // Galaxy-like gradient colors
+            });
+            }
+
+            // Flying "Nghi" text
+            var flyingTexts = [];
+            for (i = 0; i < 20; i++) { // Add multiple "Nghi" texts
+            flyingTexts.push({
+            x: rand() * width,
+            y: rand() * height,
+            speedX: rand() * 2 - 1,
+            speedY: rand() * 2 - 1,
+            opacity: rand() * 0.5 + 0.5,
+            size: rand() * 20 + 10,
+            color: "hsla(" + (rand() * 360) + ", 100%, 70%, 1)" // Galaxy-like gradient colors
+            });
             }
 
             var config = {
-                traceK: 0.4,
-                timeDelta: 0.01
+            traceK: 0.4,
+            timeDelta: 0.01
             };
 
             var time = 0;
 
             var loop = function () {
-                var n = -Math.cos(time);
-                pulse((1 + n) * .5, (1 + n) * .5);
-                time += ((Math.sin(time)) < 0 ? 9 : (n > 0.8) ? .2 : 1) * config.timeDelta;
+            var n = -Math.cos(time);
+            pulse((1 + n) * .5, (1 + n) * .5);
+            time += ((Math.sin(time)) < 0 ? 9 : (n > 0.8) ? .2 : 1) * config.timeDelta;
 
-                ctx.fillStyle = "rgba(0,0,0,.1)";
-                ctx.fillRect(0, 0, width, height);
+            ctx.fillStyle = "rgba(0,0,0,.1)";
+            ctx.fillRect(0, 0, width, height);
 
-                for (i = e.length; i--;) {
-                    var u = e[i];
-                    var q = targetPoints[u.q];
-                    var dx = u.trace[0].x - q[0];
-                    var dy = u.trace[0].y - q[1];
-                    var length = Math.sqrt(dx * dx + dy * dy);
+            for (i = e.length; i--;) {
+            var u = e[i];
+            var q = targetPoints[u.q];
+            var dx = u.trace[0].x - q[0];
+            var dy = u.trace[0].y - q[1];
+            var length = Math.sqrt(dx * dx + dy * dy);
 
-                    if (10 > length) {
-                        if (0.95 < rand()) {
-                            u.q = ~~(rand() * heartPointsCount);
-                        } else {
-                            if (0.99 < rand()) {
-                                u.D *= -1;
-                            }
-                            u.q += u.D;
-                            u.q %= heartPointsCount;
-                            if (0 > u.q) {
-                                u.q += heartPointsCount;
-                            }
-                        }
-                    }
+            if (10 > length) {
+            if (0.95 < rand()) {
+            u.q = ~~(rand() * heartPointsCount);
+            } else {
+            if (0.99 < rand()) {
+            u.D *= -1;
+            }
+            u.q += u.D;
+            u.q %= heartPointsCount;
+            if (0 > u.q) {
+            u.q += heartPointsCount;
+            }
+            }
+            }
 
-                    u.vx += -dx / length * u.speed;
-                    u.vy += -dy / length * u.speed;
-                    u.trace[0].x += u.vx;
-                    u.trace[0].y += u.vy;
-                    u.vx *= u.force;
-                    u.vy *= u.force;
+            u.vx += -dx / length * u.speed;
+            u.vy += -dy / length * u.speed;
+            u.trace[0].x += u.vx;
+            u.trace[0].y += u.vy;
+            u.vx *= u.force;
+            u.vy *= u.force;
 
-                    for (k = 0; k < u.trace.length - 1;) {
-                        var T = u.trace[k];
-                        var N = u.trace[++k];
-                        N.x -= config.traceK * (N.x - T.x);
-                        N.y -= config.traceK * (N.y - T.y);
-                    }
+            for (k = 0; k < u.trace.length - 1;) {
+            var T = u.trace[k];
+            var N = u.trace[++k];
+            N.x -= config.traceK * (N.x - T.x);
+            N.y -= config.traceK * (N.y - T.y);
+            }
 
-                    ctx.fillStyle = u.f;
-                    for (k = 0; k < u.trace.length; k++) {
-                        ctx.fillRect(u.trace[k].x, u.trace[k].y, 1, 1);
-                    }
-                }
+            u.opacity -= 0.005;
+            if (u.opacity <= 0) u.opacity = 1;
 
-                window.requestAnimationFrame(loop, canvas);
+            ctx.fillStyle = u.f.replace(/[\d.]+\)$/g, u.opacity + ')');
+            for (k = 0; k < u.trace.length; k++) {
+            ctx.fillRect(u.trace[k].x, u.trace[k].y, 1, 1);
+            }
+            }
+
+            // Draw small hearts
+            smallHearts.forEach(function (heart) {
+            heart.x += heart.speedX;
+            heart.y += heart.speedY;
+
+            if (heart.x < 0 || heart.x > width) heart.speedX *= -1;
+            if (heart.y < 0 || heart.y > height) heart.speedY *= -1;
+
+            ctx.fillStyle = heart.color;
+            ctx.beginPath();
+            ctx.moveTo(heart.x, heart.y);
+            ctx.arc(heart.x - heart.size / 4, heart.y - heart.size / 4, heart.size / 4, 0, Math.PI * 2);
+            ctx.arc(heart.x + heart.size / 4, heart.y - heart.size / 4, heart.size / 4, 0, Math.PI * 2);
+            ctx.lineTo(heart.x, heart.y + heart.size / 2);
+            ctx.closePath();
+            ctx.fill();
+            });
+
+            // Draw flying "Nghi" texts
+            flyingTexts.forEach(function (text) {
+            text.x += text.speedX;
+            text.y += text.speedY;
+
+            if (text.x < 0 || text.x > width) text.speedX *= -1;
+            if (text.y < 0 || text.y > height) text.speedY *= -1;
+
+            ctx.font = `${text.size}px Arial`;
+            ctx.fillStyle = text.color;
+            ctx.globalAlpha = text.opacity;
+            ctx.fillText("Nghi", text.x, text.y);
+            ctx.globalAlpha = 1;
+            });
+
+            // Hiệu ứng chữ "Yêu Em"
+            var textElement = document.getElementById('text');
+            if (n > 0.8) {
+            textElement.classList.add('visible');
+            } else {
+            textElement.classList.remove('visible');
+            }
+
+            window.requestAnimationFrame(loop, canvas);
             };
 
             loop();
