@@ -187,7 +187,7 @@
 
             var config = {
             traceK: 0.4,
-            timeDelta: 0.01
+            timeDelta: mobile ? 0.02 : 0.01 // Adjust timeDelta for slower heartbeats on mobile
             };
 
             var time = 0;
