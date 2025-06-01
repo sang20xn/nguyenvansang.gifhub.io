@@ -2,10 +2,10 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Thác Đổ Lời Tỏ Tình</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Pacifico&family=Great+Vibes&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Pacifico&display=swap');
         
         * {
             margin: 0;
@@ -19,17 +19,21 @@
             font-family: 'Dancing Script', cursive;
             position: relative;
             height: 100vh;
-            perspective: 1000px;
+            height: 100dvh; /* Dynamic viewport height cho mobile */
+            perspective: 1200px;
             transform-style: preserve-3d;
             transition: transform 0.1s ease-out;
+            -webkit-overflow-scrolling: touch;
+            touch-action: manipulation;
         }
 
-        /* Hiệu ứng sao lấp lánh */
+        /* Sao lấp lánh - tối ưu performance */
         .stars {
             position: absolute;
             width: 100%;
             height: 100%;
             pointer-events: none;
+            will-change: transform;
         }
 
         .star {
@@ -37,46 +41,16 @@
             background: radial-gradient(circle, #fff 0%, transparent 70%);
             border-radius: 50%;
             animation: sparkle 3s infinite alternate;
-        }
-
-        .shooting-star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: linear-gradient(45deg, #fff, #ff69b4);
-            border-radius: 50%;
-            animation: shootingStar 3s infinite linear;
-            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8), 0 0 10px #ff69b4;
+            will-change: opacity, transform;
         }
 
         @keyframes sparkle {
-            0% { opacity: 0.2; transform: scale(0.5) rotate(0deg); }
-            50% { opacity: 1; transform: scale(1) rotate(180deg); }
-            100% { opacity: 0.3; transform: scale(0.8) rotate(360deg); }
+            0% { opacity: 0.2; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0.3; transform: scale(0.8); }
         }
 
-        @keyframes shootingStar {
-            0% {
-                transform: translateX(-100px) translateY(-100px);
-                opacity: 0;
-                box-shadow: 0 0 0 1px rgba(255, 255, 255, 0), 0 0 0 #ff69b4;
-            }
-            10% {
-                opacity: 1;
-                box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8), 0 0 10px #ff69b4, -5px 0 15px #ff69b4;
-            }
-            90% {
-                opacity: 1;
-                box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8), 0 0 10px #ff69b4, -10px 0 20px #ff69b4;
-            }
-            100% {
-                transform: translateX(calc(100vw + 100px)) translateY(calc(100vh + 100px));
-                opacity: 0;
-                box-shadow: 0 0 0 1px rgba(255, 255, 255, 0), 0 0 0 #ff69b4;
-            }
-        }
-
-        /* Hiệu ứng mưa trái tim */
+        /* Mưa trái tim - giảm tải cho mobile */
         .hearts-rain {
             position: absolute;
             width: 100%;
@@ -88,8 +62,9 @@
         .heart-rain {
             position: absolute;
             color: rgba(255, 105, 180, 0.4);
-            font-size: 16px;
+            font-size: 14px;
             animation: heartRain 8s infinite linear;
+            will-change: transform, opacity;
         }
 
         @keyframes heartRain {
@@ -109,104 +84,18 @@
             }
         }
 
-        /* Hiệu ứng hoa anh đào rơi */
-        .sakura-petals {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 3;
-        }
-
-        .sakura-petal {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: linear-gradient(45deg, #ffb3d9, #ff99cc);
-            border-radius: 50% 10% 50% 10%;
-            animation: sakuraFall 15s infinite linear;
-            transform-origin: center;
-        }
-
-        @keyframes sakuraFall {
-            0% {
-                transform: translateY(-50px) translateX(0) rotate(0deg) scale(0);
-                opacity: 0;
-            }
-            5% {
-                opacity: 1;
-                transform: translateY(0) translateX(0) rotate(0deg) scale(1);
-            }
-            50% {
-                transform: translateY(50vh) translateX(var(--sakura-drift)) rotate(180deg) scale(1.2);
-            }
-            95% {
-                opacity: 1;
-                transform: translateY(95vh) translateX(var(--sakura-drift-end)) rotate(360deg) scale(0.8);
-            }
-            100% {
-                transform: translateY(100vh) translateX(var(--sakura-drift-end)) rotate(360deg) scale(0);
-                opacity: 0;
-            }
-        }
-
-        /* Hiệu ứng bướm bay */
-        .butterflies {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 4;
-        }
-
-        .butterfly {
-            position: absolute;
-            font-size: 20px;
-            animation: butterflyFly 20s infinite linear;
-            filter: drop-shadow(0 0 8px currentColor);
-        }
-
-        .butterfly-pink { color: #ff69b4; }
-        .butterfly-purple { color: #9932cc; }
-        .butterfly-blue { color: #4169e1; }
-
-        @keyframes butterflyFly {
-            0% {
-                transform: translateX(-50px) translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            5% {
-                opacity: 1;
-            }
-            25% {
-                transform: translateX(25vw) translateY(75vh) rotate(90deg);
-            }
-            50% {
-                transform: translateX(75vw) translateY(25vh) rotate(180deg);
-            }
-            75% {
-                transform: translateX(25vw) translateY(50vh) rotate(270deg);
-            }
-            95% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateX(100vw) translateY(-50px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
         /* Container chính */
         .confession-container {
             position: relative;
             width: 100vw;
             height: 100vh;
+            height: 100dvh;
             overflow: hidden;
             transform-style: preserve-3d;
             transition: transform 0.1s ease-out;
         }
 
-        /* Hiệu ứng thác đổ tin nhắn */
+        /* Tin nhắn tỏ tình - tối ưu cho mobile */
         .message {
             position: absolute;
             background: linear-gradient(135deg, 
@@ -215,25 +104,26 @@
                 rgba(138, 43, 226, 0.95) 70%,
                 rgba(75, 0, 130, 0.95) 100%);
             color: white;
-            padding: 12px 20px;
-            border-radius: 20px;
-            font-size: 16px;
+            padding: 10px 16px;
+            border-radius: 18px;
+            font-size: 14px;
             font-weight: 600;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
             box-shadow: 
-                0 8px 32px rgba(255, 20, 147, 0.4),
-                0 4px 16px rgba(138, 43, 226, 0.3),
+                0 6px 24px rgba(255, 20, 147, 0.4),
+                0 3px 12px rgba(138, 43, 226, 0.3),
                 inset 0 1px 0 rgba(255,255,255,0.3);
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.2);
             animation: straightFall 6s infinite linear;
-            max-width: 280px;
+            max-width: 240px;
             text-align: center;
             white-space: nowrap;
             overflow: hidden;
             z-index: 10;
             transform-style: preserve-3d;
-            will-change: transform;
+            will-change: transform, opacity;
+            -webkit-font-smoothing: antialiased;
         }
 
         .message::before {
@@ -245,44 +135,25 @@
             bottom: -2px;
             background: linear-gradient(45deg, #ff69b4, #9932cc, #ff1493, #8a2be2, #ff69b4);
             background-size: 300% 300%;
-            border-radius: 22px;
+            border-radius: 20px;
             z-index: -1;
-            filter: blur(8px);
+            filter: blur(6px);
             opacity: 0.8;
             animation: gradientGlow 2s infinite;
-        }
-
-        .message.special-message {
-            font-family: 'Great Vibes', cursive;
-            font-size: 18px;
-            background: linear-gradient(135deg, 
-                rgba(255, 215, 0, 0.95) 0%, 
-                rgba(255, 140, 0, 0.95) 50%,
-                rgba(255, 69, 0, 0.95) 100%);
-            animation: specialFall 8s infinite linear, messageGlow 2s infinite;
-        }
-
-        @keyframes messageGlow {
-            0%, 100% { 
-                box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 140, 0, 0.4);
-            }
-            50% { 
-                box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 140, 0, 0.6);
-            }
         }
 
         @keyframes gradientGlow {
             0% { 
                 background-position: 0% 50%;
-                filter: blur(8px) brightness(1);
+                filter: blur(6px) brightness(1);
             }
             50% { 
                 background-position: 100% 50%;
-                filter: blur(12px) brightness(1.3);
+                filter: blur(8px) brightness(1.2);
             }
             100% { 
                 background-position: 0% 50%;
-                filter: blur(8px) brightness(1);
+                filter: blur(6px) brightness(1);
             }
         }
 
@@ -305,34 +176,12 @@
             }
         }
 
-        @keyframes specialFall {
-            0% {
-                transform: translateY(-100px) translateX(0) scale(0.5) rotate(-10deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-                transform: translateY(0) translateX(0) scale(1) rotate(0deg);
-            }
-            50% {
-                transform: translateY(50vh) translateX(var(--sway)) scale(1.1) rotate(5deg);
-            }
-            90% {
-                opacity: 1;
-                transform: translateY(calc(100vh - 100px)) translateX(var(--sway)) scale(1) rotate(-5deg);
-            }
-            100% {
-                transform: translateY(100vh) translateX(var(--sway)) scale(0.5) rotate(-10deg);
-                opacity: 0;
-            }
-        }
-
-        /* Hiệu ứng hover */
-        .message:hover {
+        /* Hiệu ứng touch cho mobile */
+        .message:active {
             transform: scale(1.05) !important;
             box-shadow: 
-                0 12px 40px rgba(255, 20, 147, 0.6),
-                0 6px 20px rgba(138, 43, 226, 0.4),
+                0 8px 32px rgba(255, 20, 147, 0.6),
+                0 4px 16px rgba(138, 43, 226, 0.4),
                 inset 0 1px 0 rgba(255,255,255,0.5);
             z-index: 20;
         }
@@ -340,18 +189,18 @@
         /* Trái tim đặc biệt */
         .heart-special {
             position: absolute;
-            font-size: 32px;
+            font-size: 28px;
             animation: heartFloat 12s infinite linear;
-            text-shadow: 0 0 20px currentColor;
-            filter: drop-shadow(0 0 15px currentColor);
+            text-shadow: 0 0 15px currentColor;
+            filter: drop-shadow(0 0 10px currentColor);
             z-index: 5;
+            will-change: transform, opacity;
         }
 
         .heart-pink { color: #ff69b4; }
         .heart-purple { color: #9932cc; }
         .heart-red { color: #ff1493; }
         .heart-violet { color: #8a2be2; }
-        .heart-gold { color: #ffd700; }
 
         @keyframes heartFloat {
             0% {
@@ -362,12 +211,9 @@
                 opacity: 1;
                 transform: translateY(95vh) scale(1) rotateY(18deg);
             }
-            50% {
-                transform: translateY(50vh) scale(1.5) rotateY(180deg);
-            }
             95% {
                 opacity: 1;
-                transform: translateY(5vh) scale(1.2) rotateY(342deg);
+                transform: translateY(5vh) scale(1.1) rotateY(342deg);
             }
             100% {
                 transform: translateY(-5vh) scale(0.5) rotateY(360deg);
@@ -375,46 +221,28 @@
             }
         }
 
-        /* Hiệu ứng ánh sáng aurora */
+        /* Hiệu ứng ánh sáng - giảm tải */
         .aurora {
             position: absolute;
             width: 100%;
             height: 100%;
             background: linear-gradient(45deg, 
                 transparent 0%, 
-                rgba(255, 105, 180, 0.1) 25%,
-                rgba(138, 43, 226, 0.1) 50%,
-                rgba(255, 20, 147, 0.1) 75%,
-                transparent 100%);
-            animation: auroraMove 8s infinite;
-            pointer-events: none;
-        }
-
-        .aurora-secondary {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(-45deg, 
-                transparent 0%, 
-                rgba(64, 224, 208, 0.08) 25%,
-                rgba(255, 215, 0, 0.08) 50%,
+                rgba(255, 105, 180, 0.08) 25%,
+                rgba(138, 43, 226, 0.08) 50%,
                 rgba(255, 20, 147, 0.08) 75%,
                 transparent 100%);
-            animation: auroraSecondaryMove 10s infinite reverse;
+            animation: auroraMove 10s infinite;
             pointer-events: none;
+            will-change: transform;
         }
 
         @keyframes auroraMove {
-            0%, 100% { transform: translateX(-100%) rotateZ(0deg); }
-            50% { transform: translateX(100%) rotateZ(2deg); }
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
         }
 
-        @keyframes auroraSecondaryMove {
-            0%, 100% { transform: translateX(100%) rotateZ(0deg); }
-            50% { transform: translateX(-100%) rotateZ(-2deg); }
-        }
-
-        /* Hiệu ứng hạt sáng */
+        /* Hạt sáng - tối ưu */
         .sparkles {
             position: absolute;
             width: 100%;
@@ -425,18 +253,13 @@
 
         .sparkle {
             position: absolute;
-            width: 4px;
-            height: 4px;
+            width: 3px;
+            height: 3px;
             background: radial-gradient(circle, #fff, #ff69b4);
             border-radius: 50%;
             animation: sparkleRise 4s infinite linear;
-            box-shadow: 0 0 10px #ff69b4, 0 0 20px #ff69b4;
-        }
-
-        .sparkle-gold {
-            background: radial-gradient(circle, #ffd700, #ffaa00);
-            box-shadow: 0 0 10px #ffd700, 0 0 20px #ffaa00;
-            animation: sparkleRiseGold 5s infinite linear;
+            box-shadow: 0 0 8px #ff69b4;
+            will-change: transform, opacity;
         }
 
         @keyframes sparkleRise {
@@ -458,36 +281,14 @@
             }
         }
 
-        @keyframes sparkleRiseGold {
-            0% {
-                transform: translateY(100vh) translateX(0) scale(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-                transform: translateY(90vh) translateX(var(--sparkle-drift)) scale(1) rotate(36deg);
-            }
-            50% {
-                transform: translateY(50vh) translateX(calc(var(--sparkle-drift) * 0.5)) scale(1.5) rotate(180deg);
-            }
-            90% {
-                opacity: 1;
-                transform: translateY(10vh) translateX(calc(var(--sparkle-drift) * -1)) scale(1) rotate(324deg);
-            }
-            100% {
-                transform: translateY(-10vh) translateX(0) scale(0) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Tiêu đề chính */
+        /* Tiêu đề chính - tối ưu mobile */
         .main-title {
             position: absolute;
-            top: 30%;
+            top: 25%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-family: 'Pacifico', cursive;
-            font-size: 42px;
+            font-size: 28px;
             color: transparent;
             background: linear-gradient(45deg, 
                 #ff69b4 0%, 
@@ -499,12 +300,16 @@
             -webkit-background-clip: text;
             background-clip: text;
             animation: gradientMove 4s infinite, titleFloat 3s infinite ease-in-out;
-            text-shadow: 0 0 30px rgba(255, 105, 180, 0.8);
+            text-shadow: 0 0 20px rgba(255, 105, 180, 0.8);
             z-index: 100;
             text-align: center;
             pointer-events: none;
             transform-style: preserve-3d;
             will-change: transform;
+            -webkit-font-smoothing: antialiased;
+            padding: 0 20px;
+            max-width: 90vw;
+            line-height: 1.2;
         }
 
         @keyframes gradientMove {
@@ -515,147 +320,40 @@
 
         @keyframes titleFloat {
             0%, 100% { transform: translate(-50%, -50%) scale(1) rotateY(0deg); }
-            50% { transform: translate(-50%, -50%) scale(1.05) rotateY(5deg); }
+            50% { transform: translate(-50%, -50%) scale(1.03) rotateY(3deg); }
         }
 
-        /* Hiệu ứng mặt trăng và mây */
-        .moon {
+        /* Hiệu ứng touch */
+        .touch-heart {
             position: absolute;
-            top: 10%;
-            right: 10%;
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle, #fffacd 0%, #f0e68c 100%);
-            border-radius: 50%;
-            box-shadow: 0 0 50px rgba(255, 250, 205, 0.8), inset -10px -10px 0 rgba(240, 230, 140, 0.3);
-            animation: moonGlow 4s infinite ease-in-out;
-            z-index: 1;
-        }
-
-        @keyframes moonGlow {
-            0%, 100% { 
-                box-shadow: 0 0 50px rgba(255, 250, 205, 0.8), inset -10px -10px 0 rgba(240, 230, 140, 0.3);
-                transform: scale(1);
-            }
-            50% { 
-                box-shadow: 0 0 80px rgba(255, 250, 205, 1), inset -8px -8px 0 rgba(240, 230, 140, 0.4);
-                transform: scale(1.05);
-            }
-        }
-
-        .clouds {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .cloud {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50px;
-            animation: cloudFloat 20s infinite linear;
-        }
-
-        .cloud::before,
-        .cloud::after {
-            content: '';
-            position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50px;
-        }
-
-        .cloud-1 {
-            width: 80px;
-            height: 40px;
-            top: 20%;
-            animation-duration: 25s;
-        }
-
-        .cloud-1::before {
-            width: 50px;
-            height: 50px;
-            top: -25px;
-            left: 10px;
-        }
-
-        .cloud-1::after {
-            width: 60px;
-            height: 30px;
-            top: -15px;
-            right: 10px;
-        }
-
-        .cloud-2 {
-            width: 60px;
-            height: 30px;
-            top: 15%;
-            animation-duration: 30s;
-            animation-delay: -10s;
-        }
-
-        .cloud-2::before {
-            width: 40px;
-            height: 40px;
-            top: -20px;
-            left: 8px;
-        }
-
-        .cloud-2::after {
-            width: 45px;
-            height: 25px;
-            top: -10px;
-            right: 8px;
-        }
-
-        @keyframes cloudFloat {
-            0% {
-                transform: translateX(-100px);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateX(calc(100vw + 100px));
-                opacity: 0;
-            }
-        }
-
-        /* Hiệu ứng click */
-        .click-heart {
-            position: absolute;
-            font-size: 24px;
+            font-size: 20px;
             pointer-events: none;
             z-index: 1000;
-            animation: clickExplode 1.2s ease-out forwards;
+            animation: touchExplode 1s ease-out forwards;
+            will-change: transform, opacity;
         }
 
-        @keyframes clickExplode {
+        @keyframes touchExplode {
             0% {
                 transform: scale(0) rotate(0deg);
                 opacity: 1;
             }
             50% {
-                transform: scale(1.5) rotate(180deg);
+                transform: scale(1.2) rotate(180deg);
                 opacity: 1;
             }
             100% {
-                transform: scale(2) rotate(360deg) translate(var(--explode-x), var(--explode-y));
+                transform: scale(1.8) rotate(360deg) translate(var(--explode-x), var(--explode-y));
                 opacity: 0;
             }
         }
 
-        /* Hiệu ứng gợn sóng */
+        /* Gợn sóng touch */
         .ripple {
             position: absolute;
             border: 2px solid rgba(255, 105, 180, 0.6);
             border-radius: 50%;
-            animation: rippleEffect 1s ease-out forwards;
+            animation: rippleEffect 0.8s ease-out forwards;
             pointer-events: none;
             z-index: 999;
         }
@@ -667,114 +365,81 @@
                 opacity: 1;
             }
             100% {
-                width: 200px;
-                height: 200px;
+                width: 150px;
+                height: 150px;
                 opacity: 0;
             }
         }
 
-        /* Hiệu ứng hạt kim cương */
-        .diamonds {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 3;
-        }
-
-        .diamond {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: linear-gradient(45deg, #ffffff, #e6f3ff, #ffffff);
-            transform: rotate(45deg);
-            animation: diamondSparkle 6s infinite linear;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-        }
-
-        @keyframes diamondSparkle {
-            0% {
-                transform: translateY(100vh) rotate(45deg) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-                transform: translateY(90vh) rotate(90deg) scale(1);
-            }
-            50% {
-                transform: translateY(50vh) rotate(225deg) scale(1.2);
-            }
-            90% {
-                opacity: 1;
-                transform: translateY(10vh) rotate(315deg) scale(1);
-            }
-            100% {
-                transform: translateY(-10vh) rotate(405deg) scale(0);
-                opacity: 0;
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .message {
-                font-size: 14px;
-                padding: 8px 15px;
-                max-width: 220px;
-            }
-            .main-title {
-                font-size: 28px;
-            }
-            .moon {
-                width: 60px;
-                height: 60px;
-            }
-        }
-
+        /* Responsive Design - Mobile First */
         @media (max-width: 480px) {
             .message {
                 font-size: 12px;
-                padding: 6px 12px;
+                padding: 8px 12px;
+                max-width: 200px;
+            }
+            .main-title {
+                font-size: 22px;
+                top: 20%;
+            }
+            .heart-special {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .message {
+                font-size: 11px;
+                padding: 6px 10px;
                 max-width: 180px;
             }
             .main-title {
-                font-size: 24px;
-            }
-            .moon {
-                width: 50px;
-                height: 50px;
+                font-size: 20px;
             }
         }
 
-        /* Hiệu ứng pháo hoa */
-        .fireworks {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 15;
+        /* Landscape mode */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .main-title {
+                top: 15%;
+                font-size: 20px;
+            }
+            .message {
+                font-size: 11px;
+                padding: 6px 10px;
+            }
         }
 
-        .firework {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            animation: fireworkExplode 2s ease-out forwards;
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .message::before {
+                filter: blur(4px);
+            }
+            .sparkle {
+                box-shadow: 0 0 6px #ff69b4;
+            }
         }
 
-        @keyframes fireworkExplode {
-            0% {
-                transform: scale(0);
-                opacity: 1;
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: radial-gradient(ellipse at center, #1a0033 0%, #000011 50%, #000000 100%);
             }
-            50% {
-                transform: scale(1);
-                opacity: 1;
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.5s !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.1s !important;
             }
-            100% {
-                transform: scale(2) translate(var(--firework-x), var(--firework-y));
-                opacity: 0;
-            }
+        }
+
+        /* Performance hints */
+        .message, .heart-special, .sparkle, .star {
+            transform: translateZ(0);
+            backface-visibility: hidden;
         }
     </style>
 </head>
@@ -782,36 +447,14 @@
     <!-- Sao lấp lánh -->
     <div class="stars"></div>
     
-    <!-- Mặt trăng -->
-    <div class="moon"></div>
-    
-    <!-- Mây -->
-    <div class="clouds">
-        <div class="cloud cloud-1"></div>
-        <div class="cloud cloud-2"></div>
-    </div>
-    
     <!-- Hiệu ứng aurora -->
     <div class="aurora"></div>
-    <div class="aurora-secondary"></div>
     
     <!-- Mưa trái tim -->
     <div class="hearts-rain"></div>
     
-    <!-- Hoa anh đào -->
-    <div class="sakura-petals"></div>
-    
-    <!-- Bướm bay -->
-    <div class="butterflies"></div>
-    
-    <!-- Hạt kim cương -->
-    <div class="diamonds"></div>
-    
     <!-- Hạt sáng -->
     <div class="sparkles"></div>
-    
-    <!-- Pháo hoa -->
-    <div class="fireworks"></div>
     
     <!-- Container chính -->
     <div class="confession-container">
@@ -820,7 +463,7 @@
     </div>
 
     <script>
-        // Danh sách lời tỏ tình phong phú và lãng mạn
+        // Danh sách lời tỏ tình
         const confessionMessages = [
             "Anh yêu em nhiều lắm 💕",
             "Em có biết anh thích em không? 💝",
@@ -838,369 +481,251 @@
             "Mỗi ngày với em đều đặc biệt 🎈",
             "Yêu em từ cái nhìn đầu tiên 😍",
             "Em làm trái tim anh rung động 💓",
-            "Anh mơ về em mỗi đêm 🌙",
-            "Em là lý do anh cười mỗi ngày 😊",
-            "Được yêu em là điều hạnh phúc nhất 🍀",
-            "Anh sẽ bảo vệ em khỏi mọi điều xấu 🛡️",
-            "Em có biết em quan trọng như thế nào không? 💎",
-            "Tình yêu này sẽ không bao giờ phai 🌈",
-            "Anh muốn nắm tay em đi khắp thế gian 🌍",
-            "Em là thiên thần của anh 👼",
-            "Cảm ơn em đã yêu anh 💌",
-            "Mỗi khoảnh khắc với em đều quý giá ⏰",
-            "Em làm cuộc sống anh có ý nghĩa 🎯",
-            "Anh sẽ làm tất cả để em hạnh phúc 🎪",
+            "Hạnh phúc là được ở bên em 😊",
+            "Em có phải thiên thần không? 👼",
+            "Anh muốn nắm tay em suốt đời 🤝",
+            "Tình yêu này sẽ không bao giờ thay đổi 🔒",
+            "Em là lý do anh tỉnh dậy mỗi sáng 🌅",
+            "Anh đã tìm thấy nửa kia của mình 💫",
+            "Cuộc đời anh trọn vẹn khi có em 🌈",
+            "Em có muốn cùng anh đi khắp thế gian? 🌍",
+            "Anh sẽ cố gắng mỗi ngày vì em 💪",
             "Em là món quà đẹp nhất của cuộc đời 🎁",
-            "Yêu em không chỉ hôm nay mà mãi mãi 🔄",
-            "Em có muốn cùng anh viết câu chuyện tình yêu? 📖",
-            "Anh sẽ yêu em đến hơi thở cuối cùng 💨",
-            "Em là nửa còn lại của anh 🧩",
-            "Tình yêu anh dành cho em vô tận 🌌",
-            "Cùng nhau già đi nhé em yêu 👴👵",
-            "Em là điều kỳ diệu nhất từng xảy ra 🪄",
-            "Anh không thể sống thiếu em 🫂",
-            "Em làm anh trở thành phiên bản tốt nhất 🦋",
-            "Tình yêu này mạnh mẽ như đại dương 🌊",
-            "Em là ngôi sao sáng nhất bầu trời anh 🌟",
-            "Anh sẽ yêu em qua mọi thăng trầm 🎢",
-            "Em có biết em đẹp như thế nào không? 🌺",
-            "Được em yêu là phước lành lớn nhất 🙏",
-            "Anh muốn mỗi ngày đều thức dậy bên em ☀️",
-            "Em là bài thơ đẹp nhất anh từng đọc 📝",
-            "Tình yêu này thuần khiết như sương mai 🌿",
-            "Em làm anh tin vào những điều kỳ diệu 🎭",
-            "Anh sẽ yêu em đến khi nào tim ngừng đập 💓",
-            "Em là lý do anh muốn trở thành người tốt hơn 🌱",
-            "Cùng nhau tạo nên những kỷ niệm đẹp nhé 📸",
-            "Em là ánh nắng ấm áp trong đời anh 🌞",
-            "Anh sẽ dành cả cuộc đời để yêu em 💒",
-            "Em có biết em đặc biệt đến thế nào không? 💫",
-            "Tình yêu này sẽ được anh gìn giữ mãi 🏺",
-            "Em là câu trả lời cho mọi câu hỏi của anh ❓",
-            "Anh muốn em là người cuối cùng trong đời 🔚",
-            "Em làm anh hiểu tình yêu thật sự là gì 📚",
-            "Được yêu em là vinh dự lớn nhất 🏆",
-            "Em là điều tốt đẹp nhất đến với anh 🎊",
-            "Anh sẽ luôn đặt em lên hàng đầu 🥇",
-            "Em có muốn cùng anh bay cao bay xa? ✈️",
-            "Tình yêu này mạnh mẽ như núi non 🏔️",
-            "Em là lý do anh tin vào tình yêu đích thực 💯",
-            "Anh sẽ yêu em bằng tất cả trái tim 💗",
-            "Em là người duy nhất anh muốn ở bên 🎯"
+            "Anh muốn già đi bên em 👫",
+            "Tình yêu anh dành cho em như đại dương 🌊",
+            "Em có tin vào tình yêu đời đời không? ♾️",
+            "Anh nguyện ước chỉ một điều: được yêu em 🙏"
         ];
 
-        const specialMessages = [
-            "💎 Em sẽ làm cô dâu của anh chứ? 💎",
-            "🌟 Anh yêu em hơn cả vũ trụ 🌟",
-            "👑 Em là nữ hoàng trong tim anh 👑",
-            "🌹 Tình yêu này mãi không phai 🌹",
-            "💍 Cưới anh đi em yêu 💍",
-            "🎼 Em là bản tình ca đẹp nhất 🎼",
-            "🦋 Tình yêu làm anh bay bổng 🦋",
-            "🌈 Em là cầu vồng sau cơn mưa 🌈",
-            "💝 Em là món quà từ thiên đường 💝",
-            "🌺 Hoa có thể tàn nhưng tình yêu anh thì không 🌺"
-        ];
+        const heartTypes = ['💖', '💕', '💗', '💓', '💞', '💘', '❤️', '💝'];
+        const heartColors = ['heart-pink', 'heart-purple', 'heart-red', 'heart-violet'];
 
-        // Tạo các phần tử hiệu ứng
+        // Detect mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isLowEndDevice = navigator.hardwareConcurrency < 4 || navigator.deviceMemory < 4;
+
+        // Adjust performance based on device
+        const particleLimit = isLowEndDevice ? 30 : 60;
+        const starCount = isLowEndDevice ? 80 : 120;
+        const messageInterval = isLowEndDevice ? 1200 : 900;
+        const heartInterval = isLowEndDevice ? 3000 : 2500;
+        const sparkleInterval = isLowEndDevice ? 600 : 400;
+
+        // Tạo sao với giới hạn performance
         function createStars() {
             const starsContainer = document.querySelector('.stars');
-            for (let i = 0; i < 150; i++) {
+            for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
-                star.style.width = (Math.random() * 3 + 1) + 'px';
-                star.style.height = star.style.width;
+                star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
                 star.style.animationDelay = Math.random() * 3 + 's';
                 star.style.animationDuration = (Math.random() * 2 + 2) + 's';
                 starsContainer.appendChild(star);
             }
-
-            // Tạo sao băng
-            for (let i = 0; i < 5; i++) {
-                const shootingStar = document.createElement('div');
-                shootingStar.className = 'shooting-star';
-                shootingStar.style.left = Math.random() * 100 + '%';
-                shootingStar.style.top = Math.random() * 50 + '%';
-                shootingStar.style.animationDelay = Math.random() * 5 + 's';
-                shootingStar.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                starsContainer.appendChild(shootingStar);
-            }
         }
 
-        function createHeartsRain() {
+        // Tạo mưa trái tim với throttling
+        let heartRainCount = 0;
+        function createHeartRain() {
             const heartsContainer = document.querySelector('.hearts-rain');
-            const heartSymbols = ['💕', '💖', '💗', '💘', '💝', '💞', '💟', '❤️', '🧡', '💛', '💚', '💙', '💜', '🤍', '🖤', '💯'];
-            
-            for (let i = 0; i < 30; i++) {
+            const interval = setInterval(() => {
+                if (heartRainCount >= particleLimit) return;
+                
                 const heart = document.createElement('div');
                 heart.className = 'heart-rain';
-                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.innerHTML = heartTypes[Math.floor(Math.random() * heartTypes.length)];
                 heart.style.left = Math.random() * 100 + '%';
-                heart.style.animationDelay = Math.random() * 8 + 's';
-                heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
-                heart.style.setProperty('--drift', (Math.random() * 200 - 100) + 'px');
-                heart.style.setProperty('--rotate', (Math.random() * 360) + 'deg');
+                heart.style.setProperty('--drift', (Math.random() - 0.5) * 80 + 'px');
+                heart.style.setProperty('--rotate', Math.random() * 360 + 'deg');
+                heart.style.animationDuration = (Math.random() * 3 + 6) + 's';
+                heart.style.fontSize = (Math.random() * 4 + 12) + 'px';
                 heartsContainer.appendChild(heart);
-            }
-        }
-
-        function createSakuraPetals() {
-            const sakuraContainer = document.querySelector('.sakura-petals');
-            for (let i = 0; i < 25; i++) {
-                const petal = document.createElement('div');
-                petal.className = 'sakura-petal';
-                petal.style.left = Math.random() * 100 + '%';
-                petal.style.animationDelay = Math.random() * 15 + 's';
-                petal.style.animationDuration = (Math.random() * 8 + 12) + 's';
-                petal.style.setProperty('--sakura-drift', (Math.random() * 150 - 75) + 'px');
-                petal.style.setProperty('--sakura-drift-end', (Math.random() * 200 - 100) + 'px');
-                sakuraContainer.appendChild(petal);
-            }
-        }
-
-        function createButterflies() {
-            const butterfliesContainer = document.querySelector('.butterflies');
-            const butterflySymbols = ['🦋', '🦋', '🦋'];
-            const butterflyColors = ['butterfly-pink', 'butterfly-purple', 'butterfly-blue'];
-            
-            for (let i = 0; i < 8; i++) {
-                const butterfly = document.createElement('div');
-                butterfly.className = `butterfly ${butterflyColors[Math.floor(Math.random() * butterflyColors.length)]}`;
-                butterfly.textContent = butterflySymbols[Math.floor(Math.random() * butterflySymbols.length)];
-                butterfly.style.animationDelay = Math.random() * 20 + 's';
-                butterfly.style.animationDuration = (Math.random() * 10 + 15) + 's';
-                butterfliesContainer.appendChild(butterfly);
-            }
-        }
-
-        function createSparkles() {
-            const sparklesContainer = document.querySelector('.sparkles');
-            for (let i = 0; i < 40; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.className = Math.random() > 0.7 ? 'sparkle-gold' : 'sparkle';
-                sparkle.style.left = Math.random() * 100 + '%';
-                sparkle.style.animationDelay = Math.random() * 4 + 's';
-                sparkle.style.animationDuration = (Math.random() * 2 + 3) + 's';
-                sparkle.style.setProperty('--sparkle-drift', (Math.random() * 100 - 50) + 'px');
-                sparklesContainer.appendChild(sparkle);
-            }
-        }
-
-        function createDiamonds() {
-            const diamondsContainer = document.querySelector('.diamonds');
-            for (let i = 0; i < 15; i++) {
-                const diamond = document.createElement('div');
-                diamond.className = 'diamond';
-                diamond.style.left = Math.random() * 100 + '%';
-                diamond.style.animationDelay = Math.random() * 6 + 's';
-                diamond.style.animationDuration = (Math.random() * 3 + 4) + 's';
-                diamondsContainer.appendChild(diamond);
-            }
-        }
-
-        function createSpecialHearts() {
-            const container = document.querySelector('.confession-container');
-            const heartSymbols = ['💖', '💝', '💕', '💞', '💗'];
-            const heartColors = ['heart-pink', 'heart-purple', 'heart-red', 'heart-violet', 'heart-gold'];
-            
-            for (let i = 0; i < 12; i++) {
-                const heart = document.createElement('div');
-                heart.className = `heart-special ${heartColors[Math.floor(Math.random() * heartColors.length)]}`;
-                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.animationDelay = Math.random() * 12 + 's';
-                heart.style.animationDuration = (Math.random() * 6 + 8) + 's';
-                container.appendChild(heart);
-            }
-        }
-
-        function createMessage() {
-            const container = document.querySelector('.confession-container');
-            const message = document.createElement('div');
-            
-            // Xác định xem có phải tin nhắn đặc biệt không (15% cơ hội)
-            const isSpecial = Math.random() < 0.15;
-            const messageText = isSpecial ? 
-                specialMessages[Math.floor(Math.random() * specialMessages.length)] :
-                confessionMessages[Math.floor(Math.random() * confessionMessages.length)];
-            
-            message.className = isSpecial ? 'message special-message' : 'message';
-            message.textContent = messageText;
-            message.style.left = Math.random() * (window.innerWidth - 280) + 'px';
-            message.style.setProperty('--sway', (Math.random() * 100 - 50) + 'px');
-            
-            container.appendChild(message);
-            
-            // Xóa tin nhắn sau khi animation kết thúc
-            setTimeout(() => {
-                if (message.parentNode) {
-                    message.parentNode.removeChild(message);
-                }
-            }, isSpecial ? 8000 : 6000);
-        }
-
-        function createFirework(x, y) {
-            const fireworksContainer = document.querySelector('.fireworks');
-            const colors = ['#ff69b4', '#ff1493', '#9932cc', '#8a2be2', '#ffd700', '#ff6347'];
-            
-            for (let i = 0; i < 12; i++) {
-                const firework = document.createElement('div');
-                firework.className = 'firework';
-                firework.style.left = x + 'px';
-                firework.style.top = y + 'px';
-                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                
-                const angle = (i / 12) * Math.PI * 2;
-                const distance = Math.random() * 100 + 50;
-                const xOffset = Math.cos(angle) * distance;
-                const yOffset = Math.sin(angle) * distance;
-                
-                firework.style.setProperty('--firework-x', xOffset + 'px');
-                firework.style.setProperty('--firework-y', yOffset + 'px');
-                firework.style.animationDelay = '0s';
-                
-                fireworksContainer.appendChild(firework);
+                heartRainCount++;
                 
                 setTimeout(() => {
-                    if (firework.parentNode) {
-                        firework.parentNode.removeChild(firework);
-                    }
-                }, 2000);
-            }
+                    heart.remove();
+                    heartRainCount--;
+                }, 10000);
+            }, 1500);
         }
 
-        function createClickHeart(x, y) {
-            const heart = document.createElement('div');
-            heart.className = 'click-heart';
-            heart.textContent = ['💖', '💕', '💝', '💞', '💗'][Math.floor(Math.random() * 5)];
-            heart.style.left = x + 'px';
-            heart.style.top = y + 'px';
-            heart.style.color = ['#ff69b4', '#ff1493', '#9932cc', '#8a2be2', '#ffd700'][Math.floor(Math.random() * 5)];
+        // Tạo tin nhắn rơi
+        let messageCount = 0;
+        function createFallingMessage() {
+            if (messageCount >= 8) return; // Giới hạn số tin nhắn đồng thời
             
-            const explodeX = (Math.random() - 0.5) * 100;
-            const explodeY = (Math.random() - 0.5) * 100;
-            heart.style.setProperty('--explode-x', explodeX + 'px');
-            heart.style.setProperty('--explode-y', explodeY + 'px');
+            const container = document.querySelector('.confession-container');
+            const message = document.createElement('div');
+            message.className = 'message';
+            message.textContent = confessionMessages[Math.floor(Math.random() * confessionMessages.length)];
             
-            document.body.appendChild(heart);
+            const leftPos = Math.random() * (window.innerWidth - 250);
+            message.style.left = leftPos + 'px';
+            message.style.setProperty('--sway', (Math.random() - 0.5) * 40 + 'px');
+            
+            container.appendChild(message);
+            messageCount++;
             
             setTimeout(() => {
-                if (heart.parentNode) {
-                    heart.parentNode.removeChild(heart);
-                }
-            }, 1200);
+                message.remove();
+                messageCount--;
+            }, 6000);
         }
 
-        function createRipple(x, y) {
+        // Tạo trái tim đặc biệt
+        let heartCount = 0;
+        function createSpecialHeart() {
+            if (heartCount >= 4) return;
+            
+            const container = document.querySelector('.confession-container');
+            const heart = document.createElement('div');
+            heart.className = 'heart-special ' + heartColors[Math.floor(Math.random() * heartColors.length)];
+            heart.innerHTML = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+            heart.style.left = Math.random() * 85 + '%';
+            container.appendChild(heart);
+            heartCount++;
+            
+            setTimeout(() => {
+                heart.remove();
+                heartCount--;
+            }, 12000);
+        }
+
+        // Tạo hạt sáng
+        let sparkleCount = 0;
+        function createSparkle() {
+            if (sparkleCount >= particleLimit / 2) return;
+            
+            const container = document.querySelector('.sparkles');
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.setProperty('--sparkle-drift', (Math.random() - 0.5) * 80 + 'px');
+            sparkle.style.animationDelay = Math.random() * 2 + 's';
+            sparkle.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            container.appendChild(sparkle);
+            sparkleCount++;
+            
+            setTimeout(() => {
+                sparkle.remove();
+                sparkleCount--;
+            }, 5000);
+        }
+
+        // Touch/Click effects
+        function handleTouch(e) {
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            // Gợn sóng
             const ripple = document.createElement('div');
             ripple.className = 'ripple';
-            ripple.style.left = (x - 100) + 'px';
-            ripple.style.top = (y - 100) + 'px';
+            ripple.style.left = (clientX - 75) + 'px';
+            ripple.style.top = (clientY - 75) + 'px';
             document.body.appendChild(ripple);
-            
-            setTimeout(() => {
-                if (ripple.parentNode) {
-                    ripple.parentNode.removeChild(ripple);
+            setTimeout(() => ripple.remove(), 800);
+
+            // Hiệu ứng trái tim nổ
+            for (let i = 0; i < 4; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'touch-heart';
+                heart.innerHTML = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+                heart.style.left = clientX + 'px';
+                heart.style.top = clientY + 'px';
+                heart.style.color = ['#ff69b4', '#ff1493', '#9932cc', '#8a2be2'][Math.floor(Math.random() * 4)];
+                heart.style.setProperty('--explode-x', (Math.random() - 0.5) * 150 + 'px');
+                heart.style.setProperty('--explode-y', (Math.random() - 0.5) * 150 + 'px');
+                heart.style.animationDelay = i * 0.1 + 's';
+                
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 1000);
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('touchstart', handleTouch, { passive: true });
+        document.addEventListener('click', handleTouch);
+
+        // Gyroscope effect (simplified for better performance)
+        let isGyroEnabled = false;
+        let tiltX = 0, tiltY = 0;
+
+        function enableGyro() {
+            isGyroEnabled = true;
+            window.addEventListener('deviceorientation', (event) => {
+                if (!isGyroEnabled) return;
+                
+                const beta = event.beta || 0;
+                const gamma = event.gamma || 0;
+                
+                tiltX = Math.max(-20, Math.min(20, beta * 0.2));
+                tiltY = Math.max(-20, Math.min(20, gamma * 0.3));
+                
+                const container = document.querySelector('.confession-container');
+                container.style.transform = `
+                    rotateX(${-tiltX}deg) 
+                    rotateY(${tiltY}deg)
+                    translateZ(0)
+                `;
+            }, { passive: true });
+        }
+
+        // Auto-enable gyro for mobile
+        if (isMobile) {
+            document.addEventListener('touchstart', function() {
+                if (!isGyroEnabled) {
+                    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                        DeviceOrientationEvent.requestPermission()
+                            .then(response => {
+                                if (response === 'granted') enableGyro();
+                            })
+                            .catch(console.error);
+                    } else {
+                        enableGyro();
+                    }
                 }
-            }, 1000);
+            }, { once: true, passive: true });
         }
 
-        // Hiệu ứng 3D khi di chuyển chuột
-        function handle3DEffect(e) {
-            const body = document.body;
-            const container = document.querySelector('.confession-container');
-            
-            const mouseX = e.clientX / window.innerWidth;
-            const mouseY = e.clientY / window.innerHeight;
-            
-            const rotateY = (mouseX - 0.5) * 10;
-            const rotateX = (mouseY - 0.5) * -10;
-            
-            body.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            container.style.transform = `rotateX(${rotateX * 0.5}deg) rotateY(${rotateY * 0.5}deg)`;
-        }
-
-        // Khởi tạo tất cả hiệu ứng
-        function initialize() {
+        // Initialize everything
+        function init() {
             createStars();
-            createHeartsRain();
-            createSakuraPetals();
-            createButterflies();
-            createSparkles();
-            createDiamonds();
-            createSpecialHearts();
+            createHeartRain();
             
-            // Tạo tin nhắn liên tục
-            setInterval(createMessage, 800);
-            
-            // Thêm event listeners
-            document.addEventListener('mousemove', handle3DEffect);
-            
-            document.addEventListener('click', (e) => {
-                createClickHeart(e.clientX, e.clientY);
-                createRipple(e.clientX, e.clientY);
-                createFirework(e.clientX, e.clientY);
-            });
-            
-            // Tạo pháo hoa ngẫu nhiên
-            setInterval(() => {
-                const x = Math.random() * window.innerWidth;
-                const y = Math.random() * window.innerHeight * 0.6;
-                createFirework(x, y);
-            }, 3000);
+            // Start animations with intervals
+            setInterval(createFallingMessage, messageInterval);
+            setInterval(createSpecialHeart, heartInterval);
+            setInterval(createSparkle, sparkleInterval);
         }
 
-        // Khởi động khi trang web được tải
-        window.addEventListener('load', initialize);
-        
-        // Xử lý responsive
-        window.addEventListener('resize', () => {
-            // Cập nhật lại các hiệu ứng khi thay đổi kích thước màn hình
-            const messages = document.querySelectorAll('.message');
-            messages.forEach(message => {
-                const maxLeft = window.innerWidth - 280;
-                const currentLeft = parseInt(message.style.left);
-                if (currentLeft > maxLeft) {
-                    message.style.left = Math.random() * maxLeft + 'px';
-                }
-            });
+        // Wait for DOM and start
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            isGyroEnabled = false;
         });
 
-        // Thêm hiệu ứng âm thanh (tùy chọn)
-        function playLoveSound() {
-            // Có thể thêm âm thanh lãng mạn nếu cần
-            // const audio = new Audio('path/to/love-sound.mp3');
-            // audio.play().catch(e => console.log('Audio play failed:', e));
-        }
-
-        // Easter egg: Nhấn phím Space để tạo hiệu ứng đặc biệt
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                e.preventDefault();
-                // Tạo nhiều trái tim cùng lúc
-                for (let i = 0; i < 10; i++) {
-                    setTimeout(() => {
-                        const x = Math.random() * window.innerWidth;
-                        const y = Math.random() * window.innerHeight;
-                        createClickHeart(x, y);
-                        createFirework(x, y);
-                    }, i * 100);
-                }
+        // Handle visibility change to pause/resume animations
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // Pause heavy animations when page is hidden
+                document.querySelectorAll('.message, .heart-special, .sparkle').forEach(el => {
+                    el.style.animationPlayState = 'paused';
+                });
+            } else {
+                // Resume animations when page is visible
+                document.querySelectorAll('.message, .heart-special, .sparkle').forEach(el => {
+                    el.style.animationPlayState = 'running';
+                });
             }
         });
-
-        // Console log lãng mạn
-        console.log(`
-        💖 Chào mừng đến với Thác Đổ Lời Tỏ Tình! 💖
-        
-        🌟 Nhấn chuột để tạo hiệu ứng pháo hoa
-        ✨ Nhấn phím Space để tạo hiệu ứng đặc biệt
-        💕 Di chuyển chuột để xem hiệu ứng 3D
-        
-        Được tạo với tình yêu và sự lãng mạn ❤️
-        `);
     </script>
 </body>
 </html>
