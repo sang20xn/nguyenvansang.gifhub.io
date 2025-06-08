@@ -2,729 +2,921 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Thác Đổ Lời Tỏ Tình</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đừng Mong Chờ Thế Giới Dịu Dàng</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Pacifico&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@400;700;900&display=swap');
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            overflow: hidden;
-            background: radial-gradient(ellipse at center, #1a0033 0%, #000011 50%, #000000 100%);
-            font-family: 'Dancing Script', cursive;
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #1e3c72 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
             position: relative;
-            height: 100vh;
-            height: 100dvh; /* Dynamic viewport height cho mobile */
-            perspective: 1200px;
-            transform-style: preserve-3d;
-            transition: transform 0.1s ease-out;
-            -webkit-overflow-scrolling: touch;
-            touch-action: manipulation;
+            scroll-behavior: smooth;
+            color: #e8e8e8;
         }
-
-        /* Sao lấp lánh - tối ưu performance */
+        
+        /* Hiệu ứng stars background */
         .stars {
-            position: absolute;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
-            will-change: transform;
+            z-index: 0;
         }
-
+        
         .star {
             position: absolute;
-            background: radial-gradient(circle, #fff 0%, transparent 70%);
+            background: #fff;
             border-radius: 50%;
-            animation: sparkle 3s infinite alternate;
-            will-change: opacity, transform;
+            opacity: 0;
+            animation: twinkle 3s infinite;
         }
-
-        @keyframes sparkle {
-            0% { opacity: 0.2; transform: scale(0.5); }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
             50% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0.3; transform: scale(0.8); }
         }
-
-        /* Mưa trái tim - giảm tải cho mobile */
-        .hearts-rain {
-            position: absolute;
+        
+        /* Hiệu ứng mưa */
+        .rain {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
             z-index: 1;
+            opacity: 0.6;
         }
-
-        .heart-rain {
+        
+        .raindrop {
             position: absolute;
-            color: rgba(255, 105, 180, 0.4);
-            font-size: 14px;
-            animation: heartRain 8s infinite linear;
-            will-change: transform, opacity;
+            background: linear-gradient(180deg, transparent 0%, rgba(135, 206, 235, 0.3) 50%, transparent 100%);
+            width: 2px;
+            animation: fall linear infinite;
+            border-radius: 1px;
         }
-
-        @keyframes heartRain {
+        
+        @keyframes fall {
             0% {
-                transform: translateY(-50px) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) translateX(var(--drift)) rotate(var(--rotate));
-                opacity: 0;
-            }
-        }
-
-        /* Container chính */
-        .confession-container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            height: 100dvh;
-            overflow: hidden;
-            transform-style: preserve-3d;
-            transition: transform 0.1s ease-out;
-        }
-
-        /* Tin nhắn tỏ tình - tối ưu cho mobile */
-        .message {
-            position: absolute;
-            background: linear-gradient(135deg, 
-                rgba(255, 20, 147, 0.95) 0%, 
-                rgba(199, 21, 133, 0.95) 30%,
-                rgba(138, 43, 226, 0.95) 70%,
-                rgba(75, 0, 130, 0.95) 100%);
-            color: white;
-            padding: 10px 16px;
-            border-radius: 18px;
-            font-size: 14px;
-            font-weight: 600;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
-            box-shadow: 
-                0 6px 24px rgba(255, 20, 147, 0.4),
-                0 3px 12px rgba(138, 43, 226, 0.3),
-                inset 0 1px 0 rgba(255,255,255,0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-            animation: straightFall 6s infinite linear;
-            max-width: 240px;
-            text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            z-index: 10;
-            transform-style: preserve-3d;
-            will-change: transform, opacity;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .message::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #ff69b4, #9932cc, #ff1493, #8a2be2, #ff69b4);
-            background-size: 300% 300%;
-            border-radius: 20px;
-            z-index: -1;
-            filter: blur(6px);
-            opacity: 0.8;
-            animation: gradientGlow 2s infinite;
-        }
-
-        @keyframes gradientGlow {
-            0% { 
-                background-position: 0% 50%;
-                filter: blur(6px) brightness(1);
-            }
-            50% { 
-                background-position: 100% 50%;
-                filter: blur(8px) brightness(1.2);
-            }
-            100% { 
-                background-position: 0% 50%;
-                filter: blur(6px) brightness(1);
-            }
-        }
-
-        @keyframes straightFall {
-            0% {
-                transform: translateY(-80px) translateX(0) scale(0.8);
-                opacity: 0;
-            }
-            8% {
-                opacity: 1;
-                transform: translateY(0) translateX(0) scale(1);
-            }
-            92% {
-                opacity: 1;
-                transform: translateY(calc(100vh - 80px)) translateX(var(--sway)) scale(1);
-            }
-            100% {
-                transform: translateY(100vh) translateX(var(--sway)) scale(0.8);
-                opacity: 0;
-            }
-        }
-
-        /* Hiệu ứng touch cho mobile */
-        .message:active {
-            transform: scale(1.05) !important;
-            box-shadow: 
-                0 8px 32px rgba(255, 20, 147, 0.6),
-                0 4px 16px rgba(138, 43, 226, 0.4),
-                inset 0 1px 0 rgba(255,255,255,0.5);
-            z-index: 20;
-        }
-
-        /* Trái tim đặc biệt */
-        .heart-special {
-            position: absolute;
-            font-size: 28px;
-            animation: heartFloat 12s infinite linear;
-            text-shadow: 0 0 15px currentColor;
-            filter: drop-shadow(0 0 10px currentColor);
-            z-index: 5;
-            will-change: transform, opacity;
-        }
-
-        .heart-pink { color: #ff69b4; }
-        .heart-purple { color: #9932cc; }
-        .heart-red { color: #ff1493; }
-        .heart-violet { color: #8a2be2; }
-
-        @keyframes heartFloat {
-            0% {
-                transform: translateY(100vh) scale(0.5) rotateY(0deg);
+                transform: translateY(-100vh) rotate(15deg);
                 opacity: 0;
             }
             5% {
-                opacity: 1;
-                transform: translateY(95vh) scale(1) rotateY(18deg);
+                opacity: 0.8;
             }
             95% {
-                opacity: 1;
-                transform: translateY(5vh) scale(1.1) rotateY(342deg);
+                opacity: 0.8;
             }
             100% {
-                transform: translateY(-5vh) scale(0.5) rotateY(360deg);
+                transform: translateY(100vh) rotate(15deg);
                 opacity: 0;
             }
         }
-
-        /* Hiệu ứng ánh sáng - giảm tải */
-        .aurora {
-            position: absolute;
+        
+        /* Hiệu ứng fog overlay */
+        .fog {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, 
-                transparent 0%, 
-                rgba(255, 105, 180, 0.08) 25%,
-                rgba(138, 43, 226, 0.08) 50%,
-                rgba(255, 20, 147, 0.08) 75%,
-                transparent 100%);
-            animation: auroraMove 10s infinite;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 70%);
             pointer-events: none;
-            will-change: transform;
+            z-index: 1;
+            animation: fogMove 20s ease-in-out infinite;
         }
-
-        @keyframes auroraMove {
-            0%, 100% { transform: translateX(-100%); }
-            50% { transform: translateX(100%); }
+        
+        @keyframes fogMove {
+            0%, 100% { transform: translateX(0) translateY(0); opacity: 0.3; }
+            25% { transform: translateX(30px) translateY(-20px); opacity: 0.5; }
+            50% { transform: translateX(-20px) translateY(30px); opacity: 0.4; }
+            75% { transform: translateX(40px) translateY(10px); opacity: 0.6; }
         }
-
-        /* Hạt sáng - tối ưu */
-        .sparkles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+        
+        /* Container chính */
+        .container {
+            position: relative;
             z-index: 2;
+            min-height: 100vh;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-
-        .sparkle {
+        
+        /* Tiêu đề chính với hiệu ứng nổi bật */
+        .main-quote {
+            text-align: center;
+            margin: 4rem 0 6rem 0;
+            opacity: 0;
+            animation: fadeInUp 3s ease-out 1s forwards;
+            position: relative;
+        }
+        
+        .main-quote::before {
+            content: '';
             position: absolute;
-            width: 3px;
-            height: 3px;
-            background: radial-gradient(circle, #fff, #ff69b4);
-            border-radius: 50%;
-            animation: sparkleRise 4s infinite linear;
-            box-shadow: 0 0 8px #ff69b4;
-            will-change: transform, opacity;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #87ceeb, transparent);
+            animation: glow 2s ease-in-out infinite alternate;
         }
-
-        @keyframes sparkleRise {
+        
+        .main-quote::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #87ceeb, transparent);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px #87ceeb; }
+            100% { box-shadow: 0 0 20px #87ceeb, 0 0 30px #87ceeb; }
+        }
+        
+        .main-quote h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            color: #ffffff;
+            font-weight: 900;
+            line-height: 1.2;
+            text-shadow: 
+                0 0 10px rgba(135, 206, 235, 0.5),
+                0 0 20px rgba(135, 206, 235, 0.3),
+                0 0 30px rgba(135, 206, 235, 0.2),
+                2px 2px 8px rgba(0,0,0,0.8);
+            margin-bottom: 2rem;
+            letter-spacing: -1px;
+            background: linear-gradient(45deg, #ffffff, #87ceeb, #ffffff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShimmer 4s ease-in-out infinite;
+        }
+        
+        @keyframes textShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .main-quote .author {
+            font-size: 1.4rem;
+            color: #b0b0b0;
+            font-style: italic;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            opacity: 0;
+            animation: fadeIn 2s ease-out 3s forwards;
+        }
+        
+        /* Câu chuyện sections */
+        .story-section {
+            margin: 8rem 0;
+        }
+        
+        .story-chapter {
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.03) 0%, 
+                rgba(135, 206, 235, 0.05) 50%, 
+                rgba(255,255,255,0.03) 100%);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(135, 206, 235, 0.2);
+            border-radius: 20px;
+            padding: 4rem;
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(80px);
+            animation: storyReveal 2s ease-out forwards;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        
+        .story-chapter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .story-chapter:nth-child(1) { animation-delay: 4s; }
+        .story-chapter:nth-child(2) { animation-delay: 6s; }
+        .story-chapter:nth-child(3) { animation-delay: 8s; }
+        .story-chapter:nth-child(4) { animation-delay: 10s; }
+        .story-chapter:nth-child(5) { animation-delay: 12s; }
+        
+        .story-chapter h2 {
+            font-family: 'Playfair Display', serif;
+            color: #87ceeb;
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(135, 206, 235, 0.3);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .story-chapter h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #87ceeb, transparent);
+        }
+        
+        .story-chapter p {
+            color: #d0d0d0;
+            font-size: 1.2rem;
+            line-height: 2;
+            text-align: justify;
+            margin-bottom: 1.5rem;
+            text-indent: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .story-chapter p:first-of-type::first-letter {
+            font-size: 3.5rem;
+            font-weight: bold;
+            float: left;
+            line-height: 3rem;
+            margin: 0.5rem 0.5rem 0 0;
+            color: #87ceeb;
+            text-shadow: 0 0 10px rgba(135, 206, 235, 0.5);
+        }
+        
+        /* Hiệu ứng floating elements */
+        .floating-element {
+            position: absolute;
+            color: rgba(135, 206, 235, 0.2);
+            font-size: 2rem;
+            animation: float 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .floating-element:nth-child(odd) {
+            animation-direction: reverse;
+            animation-duration: 6s;
+        }
+        
+        .floating-element:nth-child(even) {
+            animation-duration: 10s;
+        }
+        
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1); 
+                opacity: 0.2;
+            }
+            25% { 
+                transform: translateY(-30px) rotate(5deg) scale(1.1); 
+                opacity: 0.4;
+            }
+            50% { 
+                transform: translateY(-60px) rotate(0deg) scale(1.2); 
+                opacity: 0.3;
+            }
+            75% { 
+                transform: translateY(-30px) rotate(-5deg) scale(1.1); 
+                opacity: 0.5;
+            }
+        }
+        
+        /* Quote highlights */
+        .quote-highlight {
+            background: linear-gradient(45deg, rgba(135, 206, 235, 0.1), rgba(255, 255, 255, 0.05));
+            border-left: 4px solid #87ceeb;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+            color: #87ceeb;
+            text-shadow: 0 0 5px rgba(135, 206, 235, 0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 3;
+            opacity: 0.6;
+        }
+        
+        .scroll-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(135, 206, 235, 0.3);
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .scroll-dot.active {
+            background: #87ceeb;
+            box-shadow: 0 0 10px rgba(135, 206, 235, 0.5);
+            transform: scale(1.2);
+        }
+        
+        /* Particle system */
+        .particle {
+            position: absolute;
+            background: #87ceeb;
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 6s infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes particleFloat {
             0% {
-                transform: translateY(100vh) translateX(0) scale(0);
                 opacity: 0;
+                transform: translateY(100px) scale(0);
             }
             10% {
                 opacity: 1;
-                transform: translateY(90vh) translateX(var(--sparkle-drift)) scale(1);
+                transform: translateY(80px) scale(1);
             }
             90% {
                 opacity: 1;
-                transform: translateY(10vh) translateX(calc(var(--sparkle-drift) * -1)) scale(1);
+                transform: translateY(-80px) scale(1);
             }
             100% {
-                transform: translateY(-10vh) translateX(0) scale(0);
                 opacity: 0;
+                transform: translateY(-100px) scale(0);
             }
         }
-
-        /* Tiêu đề chính - tối ưu mobile */
-        .main-title {
-            position: absolute;
-            top: 25%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Pacifico', cursive;
-            font-size: 28px;
-            color: transparent;
-            background: linear-gradient(45deg, 
-                #ff69b4 0%, 
-                #ff1493 25%, 
-                #9932cc 50%, 
-                #8a2be2 75%,
-                #ff69b4 100%);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: gradientMove 4s infinite, titleFloat 3s infinite ease-in-out;
-            text-shadow: 0 0 20px rgba(255, 105, 180, 0.8);
-            z-index: 100;
-            text-align: center;
-            pointer-events: none;
-            transform-style: preserve-3d;
-            will-change: transform;
-            -webkit-font-smoothing: antialiased;
-            padding: 0 20px;
-            max-width: 90vw;
-            line-height: 1.2;
-        }
-
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes titleFloat {
-            0%, 100% { transform: translate(-50%, -50%) scale(1) rotateY(0deg); }
-            50% { transform: translate(-50%, -50%) scale(1.03) rotateY(3deg); }
-        }
-
-        /* Hiệu ứng touch */
-        .touch-heart {
-            position: absolute;
-            font-size: 20px;
-            pointer-events: none;
-            z-index: 1000;
-            animation: touchExplode 1s ease-out forwards;
-            will-change: transform, opacity;
-        }
-
-        @keyframes touchExplode {
+        
+        /* Animations */
+        @keyframes fadeInUp {
             0% {
-                transform: scale(0) rotate(0deg);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.2) rotate(180deg);
-                opacity: 1;
+                opacity: 0;
+                transform: translateY(80px);
             }
             100% {
-                transform: scale(1.8) rotate(360deg) translate(var(--explode-x), var(--explode-y));
-                opacity: 0;
+                opacity: 1;
+                transform: translateY(0);
             }
         }
-
-        /* Gợn sóng touch */
-        .ripple {
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes storyReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(80px) rotateX(10deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) rotateX(0deg);
+            }
+        }
+        
+        /* Mouse trail effect */
+        .mouse-trail {
             position: absolute;
-            border: 2px solid rgba(255, 105, 180, 0.6);
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, #87ceeb, transparent);
             border-radius: 50%;
-            animation: rippleEffect 0.8s ease-out forwards;
             pointer-events: none;
             z-index: 999;
+            animation: trailFade 0.5s ease-out forwards;
         }
-
-        @keyframes rippleEffect {
-            0% {
-                width: 0;
-                height: 0;
-                opacity: 1;
+        
+        @keyframes trailFade {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 1.5rem;
             }
-            100% {
-                width: 150px;
-                height: 150px;
-                opacity: 0;
+            
+            .story-chapter {
+                padding: 3rem;
+            }
+            
+            .main-quote h1 {
+                font-size: 3rem;
             }
         }
-
-        /* Responsive Design - Mobile First */
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .story-chapter {
+                padding: 2rem;
+                margin-bottom: 3rem;
+            }
+            
+            .main-quote h1 {
+                font-size: 2.5rem;
+            }
+            
+            .story-chapter h2 {
+                font-size: 1.8rem;
+            }
+            
+            .story-chapter p {
+                font-size: 1.1rem;
+                text-indent: 1rem;
+            }
+            
+            .scroll-indicator {
+                display: none;
+            }
+        }
+        
         @media (max-width: 480px) {
-            .message {
-                font-size: 12px;
-                padding: 8px 12px;
-                max-width: 200px;
+            .main-quote {
+                margin: 2rem 0 4rem 0;
             }
-            .main-title {
-                font-size: 22px;
-                top: 20%;
+            
+            .story-chapter {
+                padding: 1.5rem;
             }
-            .heart-special {
-                font-size: 24px;
+            
+            .main-quote h1 {
+                font-size: 2rem;
             }
-        }
-
-        @media (max-width: 360px) {
-            .message {
-                font-size: 11px;
-                padding: 6px 10px;
-                max-width: 180px;
+            
+            .story-chapter p:first-of-type::first-letter {
+                font-size: 2.5rem;
+                line-height: 2rem;
             }
-            .main-title {
-                font-size: 20px;
-            }
-        }
-
-        /* Landscape mode */
-        @media (orientation: landscape) and (max-height: 500px) {
-            .main-title {
-                top: 15%;
-                font-size: 20px;
-            }
-            .message {
-                font-size: 11px;
-                padding: 6px 10px;
-            }
-        }
-
-        /* High DPI displays */
-        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-            .message::before {
-                filter: blur(4px);
-            }
-            .sparkle {
-                box-shadow: 0 0 6px #ff69b4;
-            }
-        }
-
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: radial-gradient(ellipse at center, #1a0033 0%, #000011 50%, #000000 100%);
-            }
-        }
-
-        /* Reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.5s !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.1s !important;
-            }
-        }
-
-        /* Performance hints */
-        .message, .heart-special, .sparkle, .star {
-            transform: translateZ(0);
-            backface-visibility: hidden;
         }
     </style>
 </head>
 <body>
-    <!-- Sao lấp lánh -->
-    <div class="stars"></div>
+    <div class="stars" id="stars"></div>
+    <div class="rain" id="rain"></div>
+    <div class="fog"></div>
     
-    <!-- Hiệu ứng aurora -->
-    <div class="aurora"></div>
-    
-    <!-- Mưa trái tim -->
-    <div class="hearts-rain"></div>
-    
-    <!-- Hạt sáng -->
-    <div class="sparkles"></div>
-    
-    <!-- Container chính -->
-    <div class="confession-container">
-        <!-- Tiêu đề chính -->
-        <div class="main-title">💖 Tình Yêu Của Anh Dành Cho Em 💖</div>
+    <div class="scroll-indicator" id="scrollIndicator">
+        <div class="scroll-dot active" data-target="main-quote"></div>
+        <div class="scroll-dot" data-target="story1"></div>
+        <div class="scroll-dot" data-target="story2"></div>
+        <div class="scroll-dot" data-target="story3"></div>
+        <div class="scroll-dot" data-target="story4"></div>
+        <div class="scroll-dot" data-target="story5"></div>
     </div>
-
+    
+    <div class="container">
+        <div class="main-quote" id="main-quote">
+            <h1>"Đừng mong chờ thế giới dịu dàng với bạn,<br>mà hãy trở nên mạnh mẽ để đối mặt với thế giới"</h1>
+            <div class="author">- Triết lý sống từ những thử thách cuộc đời -</div>
+        </div>
+        
+        <div class="story-section">
+            <div class="story-chapter" id="story1">
+                <h2>🌧️ Chương I: Cơn Mưa Đầu Tiên Của Tuổi Thơ</h2>
+                <p>Ngày ấy, em chỉ là đứa trẻ 7 tuổi với đôi mắt trong veo như giọt sương mai. Thế giới trong mắt em tựa như một khu vườn cổ tích, nơi mọi thứ đều tươi đẹp và an toàn. Ba mẹ luôn che chắn em khỏi mọi khó khăn, thầy cô luôn động viên, và bạn bè xung quanh đều thân thiện. Em tin rằng thế giới này được tạo ra để yêu thương và bảo vệ em.</p>
+                
+                <p>Cho đến một ngày mùa thu, khi em đang chơi đùa trong sân trường, bầu trời đột nhiên đổ xuống những giọt mưa lạnh buốt. Đó không phải là những giọt mưa nhẹ nhàng mà em thường thấy qua cửa sổ, mà là những giọt mưa to và tàn khốc, đập xuống vai nhỏ bé của em như những viên đá. Em hoảng sợ, tìm kiếm sự che chắn, nhưng tất cả bạn bè đã chạy về nhà, để lại em một mình giữa sân trường rộng lớn.</p>
+                
+                <p>Em đứng đó, run rẩy trong chiếc áo mỏng manh đã ướt sũng, và lần đầu tiên trong đời, em cảm nhận được sự lạnh lẽo của thế giới. Không có ai đến che ô cho em, không có ai ôm em vào lòng để sưởi ấm. Chỉ có tiếng mưa rơi như những tiếng khóc của bầu trời, và em – một đứa trẻ bé nhỏ – đang đối mặt với thử thách đầu tiên của cuộc đời.</p>
+                
+                <div class="quote-highlight">
+                    "Trong cơn mưa đầu tiên ấy, tôi hiểu rằng thế giới không có nghĩa vụ phải che chắn cho tôi. Nó chỉ đơn giản là tồn tại, và tôi phải học cách sống chung với nó."
+                </div>
+                
+                <p>Khi ba mẹ cuối cùng tìm thấy em, em đã không còn khóc nữa. Trong đôi mắt trẻ thơ ấy, có điều gì đó đã thay đổi. Một hạt giống nhỏ bé của sự hiểu biết đã được gieo trồng – rằng cuộc sống không phải lúc nào cũng dịu dàng, và đôi khi, em phải tự mình đứng vững giữa những cơn bão.</p>
+            </div>
+            
+            <div class="story-chapter" id="story2">
+                <h2>⚡ Chương II: Những Cơn Bão Tuổi Dậy Thì</h2>
+                <p>Thời gian trôi qua như dòng nước chảy, và em giờ đã lớn hơn. Tuổi 15, khi mà trái tim bắt đầu biết yêu và tâm hồn bắt đầu khao khát được hiểu. Nhưng thế giới không hề dịu dàng với những khao khát ấy. Thay vào đó, nó mang đến cho em những cơn bão dữ dội hơn cả cơn mưa thuở nhỏ.</p>
+                
+                <p>Lần đầu tiên bị phản bội bởi người bạn thân nhất, em cảm thấy như tim mình vỡ thành ngàn mảnh. Lần đầu tiên bị từ chối bởi người em thầm yêu, em hiểu rằng tình cảm không phải lúc nào cũng được đáp trả. Lần đầu tiên thất bại trong kỳ thi quan trọng, em nhận ra rằng nỗ lực không phải lúc nào cũng được đền đáp công bằng.</p>
+                
+                <p>Những đêm em nằm thao thức, tự hỏi tại sao thế giới lại tàn khốc đến vậy. Tại sao nó không thể hiểu được nỗi đau của một trái tim tuổi teen? Tại sao nó không thể cho em một chút thương cảm, một chút dịu dàng? Em mong chờ, em khóc lóc, em phẫn nộ, nhưng thế giới vẫn tiếp tục quay tròn theo quy luật riêng của nó.</p>
+                
+                <p>Có những lúc em muốn buông xuôi, muốn trốn chạy khỏi tất cả. Nhưng rồi em nhớ lại cơn mưa ngày ấy, khi em còn bé. Em nhớ cảm giác đứng một mình giữa sân trường, và cách em đã tự mình bước qua nó. Có lẽ, đây cũng chỉ là một cơn bão khác mà em cần phải vượt qua.</p>
+                
+                <div class="quote-highlight">
+                    "Tuổi trẻ là lúc ta học được bài học đau đớn nhất: thế giới không xoay quanh ta, và nỗi đau của ta không phải là trọng tâm của vũ trụ."
+                </div>
+                
+                <p>Từ những vết thương ấy, em bắt đầu xây dựng lớp áo giáp đầu tiên cho trái tim mình. Không phải là sự lạnh lùng hay thờ ơ, mà là sự hiểu biết rằng nếu muốn sống và phát triển trong thế giới này, em cần phải có sức mạnh riêng của mình.</p>
+            </div>
+            
+            <div class="story-chapter" id="story3">
+                <h2>🔥 Chương III: Ngọn Lửa Trong Tro Tàn</h2>
+                <p>Tuổi hai mười, khi em bước chân vào thế giới người lớn với bao hy vọng và hoài bão. Em nghĩ rằng với tấm bằng trên tay và kiến thức trong đầu, em sẽ có thể chinh phục mọi thử thách. Nhưng thế giới một lần nữa cho em biết rằng nó không hề quan tâm đến những gì em mong đợi.</p>
+                
+                <p>Công việc đầu tiên, em bị sa thải chỉ sau ba tháng vì "không phù hợp với văn hóa công ty". Tình yêu đầu đời, em bị phản bội một cách tàn nhẫn nhất. Những giấc mơ em ấp ủ từ thuở học sinh, một cái một tan thành mây khói trước sự khắc nghiệt của hiện thực.</p>
+                
+                <p>Có những đêm em ngồi một mình trong căn phòng trọ nhỏ, nhìn ra cửa sổ và tự hỏi liệu mình có sai khi tin tưởng vào sự tốt đẹp của cuộc sống. Em thấy mình như một con thuyền nhỏ bé giữa đại dương bao la, bị sóng gió đánh đập không thương tiếc. Có lúc em nghĩ, có lẽ mình sinh ra là để chịu đựng, để làm kẻ thất bại.</p>
+                
+                <p>Nhưng rồi, trong đêm tối nhất của cuộc đời, em nhìn thấy một ngọn lửa nhỏ bé đang cháy bên trong trái tim mình. Đó không phải là ngọn lửa của sự căm hận hay phẫn nộ, mà là ngọn lửa của ý chí – ý chí không chịu khuất phục trước số phận, ý chí muốn chứng minh rằng mình có thể mạnh mẽ hơn những gì thế giới nghĩ.</p>
+                
+                <p>Em bắt đầu nhận ra rằng tất cả những thất bại, những tổn thương mà em trải qua không phải là sự trừng phạt, mà là những bài học. Thế giới không tàn khốc với em vì nó ghét em, mà bởi vì nó đang rèn luyện em. Mỗi cú đánh, mỗi thất bại, mỗi nỗi đau đều là một cách để thế giới nói với em: "Hãy mạnh mẽ hơn nữa."</p>
+                
+                <div class="quote-highlight">
+                    "Tôi nhận ra rằng sức mạnh không phải là thứ được ban tặng, mà là thứ được rèn luyện qua từng thử thách. Và thế giới không phải kẻ thù của tôi, mà là người thầy khắc nghiệt nhất."
+                </div>
+                
+                <p>Từ đống tro tàn của những thất bại, em bắt đầu xây dựng lại chính mình. Không phải bằng cách mong chờ thế giới thay đổi, mà bằng cách thay đổi cách mình nhìn nhận và phản ứng với thế giới. Em học cách biến nỗi đau thành động lực, biến thất bại thành bài học, biến sự tàn khốc thành sức mạnh.</p>
+            </div>
+            
+            <div class="story-chapter" id="story4">
+                <h2>🌅 Chương IV: Bình Minh Của Sự Giác Ngộ</h2>
+                <p>Ba mười tuổi, khi em đã trải qua đủ những thăng trầm của cuộc đời để hiểu rằng hạnh phúc và nỗi buồn chỉ là hai mặt của cùng một đồng xu. Em không còn mong chờ thế giới sẽ dịu dàng với mình, bởi em đã học được cách tự tạo ra sự dịu dàng trong chính trái tim mình.</p>
+                
+                <p>Ngày hôm nay, khi nhìn lại con đường đã qua, em thấy mình như một người thủy thủ dày dạn kinh nghiệm. Những cơn bão mà trước kia làm em hoảng sợ, giờ đây chỉ là những thử thách bình thường. Em đã học cách điều hướng con thuyền của mình qua những đợt sóng dữ dội nhất, không phải bằng cách cầu xin biển cả dịu dàng, mà bằng cách trở thành một thuyền trưởng bản lĩnh.</p>
+                
+                <p>Em hiểu rằng sức mạnh thật sự không nằm ở việc không bao giờ ngã xuống, mà nằm ở khả năng đứng dậy mỗi khi ngã. Không nằm ở việc không bao giờ đau đớn, mà nằm ở cách em biến đau đớn thành trí tuệ. Không nằm ở việc thế giới đối xử tốt với em, mà nằm ở cách em tự đối xử tốt với chính mình giữa một thế giới đầy thử thách.</p>
+                
+                <p>Những vết scar trên tâm hồn em giờ đây không còn là dấu hiệu của sự yếu đuối, mà là bằng chứng của sự kiên cường. Mỗi vết thương đã lành đều kể một câu chuyện về sự vượt qua, về khả năng chữa lành và phục hồi của con người. Em đã học được rằng không ai có thể cứu em khỏi cuộc sống này, ngoài chính bản thân em.</p>
+                
+                <div class="quote-highlight">
+                    "Bây giờ tôi hiểu rằng thế giới không bao giờ hứa hẹn sẽ dịu dàng. Nhưng chính điều đó đã dạy tôi cách trở nên mạnh mẽ đến mức có thể tự tạo ra sự dịu dàng cho chính mình và cho những người xung quanh."
+                </div>
+                
+                <p>Em không còn oán trách thế giới về những khó khăn nó mang lại, bởi em biết rằng chính những khó khăn ấy đã tôi luyện nên con người em ngày hôm nay. Nếu thế giới luôn dịu dàng, em sẽ không bao giờ biết mình mạnh mẽ đến mức nào. Nếu cuộc sống luôn dễ dàng, em sẽ không bao giờ trân trọng những khoảnh khắc bình yên.</p>
+            </div>
+            
+            <div class="story-chapter" id="story5">
+                <h2>🌟 Chương V: Người Truyền Lửa</h2>
+                <p>Bốn mười tuổi, em đã trở thành một người hoàn toàn khác. Không phải vì em đã trở nên lạnh lùng hay thờ ơ với thế giới, mà bởi vì em đã học được cách yêu thương một cách thông minh hơn. Em yêu thế giới này với tất cả sự tàn khốc và tươi đẹp của nó, bởi em hiểu rằng chính sự tàn khốc ấy đã tạo nên sự tươi đẹp trong con người em.</p>
+                
+                <p>Giờ đây, khi gặp những người trẻ tuổi còn đang mong chờ thế giới dịu dàng với họ, em không cười nhạo hay phán xét. Thay vào đó, em nhìn thấy chính mình của ngày xưa trong ánh mắt họ. Em hiểu được nỗi đau khi lần đầu tiên nhận ra rằng cuộc sống không phải như những câu chuyện cổ tích.</p>
+                
+                <p>Em bắt đầu chia sẻ câu chuyện của mình, không phải để làm họ nản lòng, mà để thắp lên trong họ ngọn lửa hy vọng. Em kể cho họ nghe về cơn mưa đầu tiên của tuổi thơ, về những cơn bão tuổi dậy thì, về ngọn lửa trong tro tàn, và về bình minh của sự giác ngộ. Em muốn họ biết rằng đau đớn là tạm thời, nhưng sức mạnh kiếm được từ đau đớn ấy sẽ theo họ suốt đời.</p>
+                
+                <p>Em trở thành người thầy cho những tâm hồn đang lạc lối, không phải bằng cách che chắn họ khỏi những cơn bão, mà bằng cách dạy họ cách đối mặt với bão. Em dạy họ rằng sự mạnh mẽ không phải là không bao giờ ngã, mà là luôn biết cách đứng dậy. Sự can đảm không phải là không biết sợ, mà là hành động dù cho có sợ hãi.</p>
+                
+                <p>Những người em giúp đỡ giờ đây cũng đang truyền lửa cho những người khác. Họ đã hiểu được rằng thế giới không nợ họ một cuộc sống dễ dàng, nhưng chính họ nợ bản thân mình một cuộc sống đáng sống. Họ không còn ngồi chờ đợi ai đó đến cứu mình, mà đã học cách trở thành người hùng của chính câu chuyện đời mình.</p>
+                
+                <div class="quote-highlight">
+                    "Tôi nhận ra rằng mục đích của cuộc đời không phải là được thế giới yêu thương, mà là học cách yêu thương thế giới này dù cho nó có thể tàn khốc. Và từ tình yêu ấy, tôi tìm thấy sức mạnh để không chỉ sống sót, mà còn để phát triển và giúp đỡ người khác."
+                </div>
+                
+                <p>Em hiểu rằng câu nói "Đừng mong chờ thế giới dịu dàng với bạn, mà hãy trở nên mạnh mẽ để đối mặt với thế giới" không phải là một lời khuyên lạnh lùng. Đó là một lời nhắc nhở đầy tình yêu thương, một cách để nói rằng: "Bạn mạnh mẽ hơn bạn nghĩ, và bạn có khả năng vượt qua mọi thử thách nếu bạn tin tưởng vào chính mình."</p>
+                
+                <p>Ngày hôm nay, khi đứng trước gương, em thấy một con người đã trưởng thành qua từng thử thách. Những nếp nhăn quanh mắt không phải dấu hiệu của tuổi tác, mà là dấu hiệu của những nụ cười sau mỗi lần vượt qua khó khăn. Những vết sẹo trên tâm hồn không phải là chứng tích của sự thất bại, mà là huy chương của sự chiến thắng.</p>
+                
+                <p>Em biết rằng con đường phía trước vẫn còn nhiều thử thách, nhưng em không còn sợ hãi. Bởi em đã có trong tay vũ khí mạnh nhất – đó là sự hiểu biết rằng mình có thể đối mặt với bất cứ điều gì cuộc sống mang lại. Em đã trở nên mạnh mẽ không phải để chống lại thế giới, mà để ôm trọn thế giới này với tất cả những gì nó có.</p>
+                
+                <p>Và đó chính là ý nghĩa sâu xa nhất của câu nói ấy: Khi chúng ta không còn mong chờ thế giới thay đổi để phù hợp với mình, mà thay đổi bản thân để có thể yêu thương và sống hòa hài với thế giới, chúng ta sẽ tìm thấy một sức mạnh và hạnh phúc mà không điều gì có thể cướp đi được.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Floating elements với nhiều biểu tượng hơn -->
+    <div class="floating-element" style="top: 5%; left: 8%;">💧</div>
+    <div class="floating-element" style="top: 15%; right: 12%;">⚡</div>
+    <div class="floating-element" style="top: 25%; left: 85%;">🌙</div>
+    <div class="floating-element" style="top: 35%; right: 8%;">✨</div>
+    <div class="floating-element" style="top: 45%; left: 10%;">🌊</div>
+    <div class="floating-element" style="top: 55%; right: 15%;">🔥</div>
+    <div class="floating-element" style="top: 65%; left: 80%;">🌟</div>
+    <div class="floating-element" style="top: 75%; right: 5%;">🦋</div>
+    <div class="floating-element" style="top: 85%; left: 15%;">🌸</div>
+    <div class="floating-element" style="top: 10%; left: 50%;">🍃</div>
+    <div class="floating-element" style="top: 30%; left: 25%;">❄️</div>
+    <div class="floating-element" style="top: 50%; right: 40%;">🌺</div>
+    <div class="floating-element" style="top: 70%; left: 60%;">🍂</div>
+    <div class="floating-element" style="top: 20%; right: 30%;">💫</div>
+    <div class="floating-element" style="top: 40%; left: 40%;">🌿</div>
+    
     <script>
-        // Danh sách lời tỏ tình
-        const confessionMessages = [
-            "Anh yêu em nhiều lắm 💕",
-            "Em có biết anh thích em không? 💝",
-            "Cảm ơn vì em đã đến bên anh 🌹",
-            "Anh sẽ luôn bên cạnh em 💖",
-            "Làm người yêu anh nhé ❤️",
-            "Em là ánh sáng của cuộc đời anh ✨",
-            "Anh muốn được chăm sóc em 🥰",
-            "Tình yêu anh dành cho em thật lớn 💞",
-            "Em có muốn làm vợ anh không? 💍",
-            "Anh sẽ yêu em mãi mãi 💗",
-            "Cùng nhau xây dựng tương lai nhé 🏠",
-            "Em là điều tuyệt vời nhất đời anh 🌟",
-            "Anh chỉ cần có em thôi 💘",
-            "Mỗi ngày với em đều đặc biệt 🎈",
-            "Yêu em từ cái nhìn đầu tiên 😍",
-            "Em làm trái tim anh rung động 💓",
-            "Hạnh phúc là được ở bên em 😊",
-            "Em có phải thiên thần không? 👼",
-            "Anh muốn nắm tay em suốt đời 🤝",
-            "Tình yêu này sẽ không bao giờ thay đổi 🔒",
-            "Em là lý do anh tỉnh dậy mỗi sáng 🌅",
-            "Anh đã tìm thấy nửa kia của mình 💫",
-            "Cuộc đời anh trọn vẹn khi có em 🌈",
-            "Em có muốn cùng anh đi khắp thế gian? 🌍",
-            "Anh sẽ cố gắng mỗi ngày vì em 💪",
-            "Em là món quà đẹp nhất của cuộc đời 🎁",
-            "Anh muốn già đi bên em 👫",
-            "Tình yêu anh dành cho em như đại dương 🌊",
-            "Em có tin vào tình yêu đời đời không? ♾️",
-            "Anh nguyện ước chỉ một điều: được yêu em 🙏"
-        ];
-
-        const heartTypes = ['💖', '💕', '💗', '💓', '💞', '💘', '❤️', '💝'];
-        const heartColors = ['heart-pink', 'heart-purple', 'heart-red', 'heart-violet'];
-
-        // Detect mobile device
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        const isLowEndDevice = navigator.hardwareConcurrency < 4 || navigator.deviceMemory < 4;
-
-        // Adjust performance based on device
-        const particleLimit = isLowEndDevice ? 30 : 60;
-        const starCount = isLowEndDevice ? 80 : 120;
-        const messageInterval = isLowEndDevice ? 1200 : 900;
-        const heartInterval = isLowEndDevice ? 3000 : 2500;
-        const sparkleInterval = isLowEndDevice ? 600 : 400;
-
-        // Tạo sao với giới hạn performance
+        // Tạo hiệu ứng sao
         function createStars() {
-            const starsContainer = document.querySelector('.stars');
-            for (let i = 0; i < starCount; i++) {
+            const starsContainer = document.getElementById('stars');
+            const numberOfStars = 100;
+            
+            for (let i = 0; i < numberOfStars; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
-                star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
                 star.style.animationDelay = Math.random() * 3 + 's';
-                star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                star.style.animationDuration = Math.random() * 3 + 2 + 's';
                 starsContainer.appendChild(star);
             }
         }
-
-        // Tạo mưa trái tim với throttling
-        let heartRainCount = 0;
-        function createHeartRain() {
-            const heartsContainer = document.querySelector('.hearts-rain');
-            const interval = setInterval(() => {
-                if (heartRainCount >= particleLimit) return;
-                
-                const heart = document.createElement('div');
-                heart.className = 'heart-rain';
-                heart.innerHTML = heartTypes[Math.floor(Math.random() * heartTypes.length)];
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.setProperty('--drift', (Math.random() - 0.5) * 80 + 'px');
-                heart.style.setProperty('--rotate', Math.random() * 360 + 'deg');
-                heart.style.animationDuration = (Math.random() * 3 + 6) + 's';
-                heart.style.fontSize = (Math.random() * 4 + 12) + 'px';
-                heartsContainer.appendChild(heart);
-                heartRainCount++;
-                
-                setTimeout(() => {
-                    heart.remove();
-                    heartRainCount--;
-                }, 10000);
-            }, 1500);
-        }
-
-        // Tạo tin nhắn rơi
-        let messageCount = 0;
-        function createFallingMessage() {
-            if (messageCount >= 8) return; // Giới hạn số tin nhắn đồng thời
+        
+        // Tạo hiệu ứng mưa nâng cao
+        function createRain() {
+            const rainContainer = document.getElementById('rain');
+            const numberOfDrops = 80;
             
-            const container = document.querySelector('.confession-container');
-            const message = document.createElement('div');
-            message.className = 'message';
-            message.textContent = confessionMessages[Math.floor(Math.random() * confessionMessages.length)];
-            
-            const leftPos = Math.random() * (window.innerWidth - 250);
-            message.style.left = leftPos + 'px';
-            message.style.setProperty('--sway', (Math.random() - 0.5) * 40 + 'px');
-            
-            container.appendChild(message);
-            messageCount++;
-            
-            setTimeout(() => {
-                message.remove();
-                messageCount--;
-            }, 6000);
-        }
-
-        // Tạo trái tim đặc biệt
-        let heartCount = 0;
-        function createSpecialHeart() {
-            if (heartCount >= 4) return;
-            
-            const container = document.querySelector('.confession-container');
-            const heart = document.createElement('div');
-            heart.className = 'heart-special ' + heartColors[Math.floor(Math.random() * heartColors.length)];
-            heart.innerHTML = heartTypes[Math.floor(Math.random() * heartTypes.length)];
-            heart.style.left = Math.random() * 85 + '%';
-            container.appendChild(heart);
-            heartCount++;
-            
-            setTimeout(() => {
-                heart.remove();
-                heartCount--;
-            }, 12000);
-        }
-
-        // Tạo hạt sáng
-        let sparkleCount = 0;
-        function createSparkle() {
-            if (sparkleCount >= particleLimit / 2) return;
-            
-            const container = document.querySelector('.sparkles');
-            const sparkle = document.createElement('div');
-            sparkle.className = 'sparkle';
-            sparkle.style.left = Math.random() * 100 + '%';
-            sparkle.style.setProperty('--sparkle-drift', (Math.random() - 0.5) * 80 + 'px');
-            sparkle.style.animationDelay = Math.random() * 2 + 's';
-            sparkle.style.animationDuration = (Math.random() * 2 + 3) + 's';
-            container.appendChild(sparkle);
-            sparkleCount++;
-            
-            setTimeout(() => {
-                sparkle.remove();
-                sparkleCount--;
-            }, 5000);
-        }
-
-        // Touch/Click effects
-        function handleTouch(e) {
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            
-            // Gợn sóng
-            const ripple = document.createElement('div');
-            ripple.className = 'ripple';
-            ripple.style.left = (clientX - 75) + 'px';
-            ripple.style.top = (clientY - 75) + 'px';
-            document.body.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 800);
-
-            // Hiệu ứng trái tim nổ
-            for (let i = 0; i < 4; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'touch-heart';
-                heart.innerHTML = heartTypes[Math.floor(Math.random() * heartTypes.length)];
-                heart.style.left = clientX + 'px';
-                heart.style.top = clientY + 'px';
-                heart.style.color = ['#ff69b4', '#ff1493', '#9932cc', '#8a2be2'][Math.floor(Math.random() * 4)];
-                heart.style.setProperty('--explode-x', (Math.random() - 0.5) * 150 + 'px');
-                heart.style.setProperty('--explode-y', (Math.random() - 0.5) * 150 + 'px');
-                heart.style.animationDelay = i * 0.1 + 's';
-                
-                document.body.appendChild(heart);
-                setTimeout(() => heart.remove(), 1000);
+            for (let i = 0; i < numberOfDrops; i++) {
+                const drop = document.createElement('div');
+                drop.className = 'raindrop';
+                drop.style.left = Math.random() * 100 + '%';
+                drop.style.height = Math.random() * 120 + 80 + 'px';
+                drop.style.animationDuration = Math.random() * 1.5 + 1 + 's';
+                drop.style.animationDelay = Math.random() * 2 + 's';
+                drop.style.opacity = Math.random() * 0.5 + 0.3;
+                rainContainer.appendChild(drop);
             }
         }
-
-        // Event listeners
-        document.addEventListener('touchstart', handleTouch, { passive: true });
-        document.addEventListener('click', handleTouch);
-
-        // Gyroscope effect (simplified for better performance)
-        let isGyroEnabled = false;
-        let tiltX = 0, tiltY = 0;
-
-        function enableGyro() {
-            isGyroEnabled = true;
-            window.addEventListener('deviceorientation', (event) => {
-                if (!isGyroEnabled) return;
-                
-                const beta = event.beta || 0;
-                const gamma = event.gamma || 0;
-                
-                tiltX = Math.max(-20, Math.min(20, beta * 0.2));
-                tiltY = Math.max(-20, Math.min(20, gamma * 0.3));
-                
-                const container = document.querySelector('.confession-container');
-                container.style.transform = `
-                    rotateX(${-tiltX}deg) 
-                    rotateY(${tiltY}deg)
-                    translateZ(0)
-                `;
-            }, { passive: true });
+        
+        // Tạo hệ thống particle
+        function createParticles() {
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 4 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = Math.random() * 4 + 4 + 's';
+                document.body.appendChild(particle);
+            }
         }
-
-        // Auto-enable gyro for mobile
-        if (isMobile) {
-            document.addEventListener('touchstart', function() {
-                if (!isGyroEnabled) {
-                    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-                        DeviceOrientationEvent.requestPermission()
-                            .then(response => {
-                                if (response === 'granted') enableGyro();
-                            })
-                            .catch(console.error);
-                    } else {
-                        enableGyro();
+        
+        // Hiệu ứng mouse trail
+        function createMouseTrail(e) {
+            const trail = document.createElement('div');
+            trail.className = 'mouse-trail';
+            trail.style.left = e.clientX + 'px';
+            trail.style.top = e.clientY + 'px';
+            document.body.appendChild(trail);
+            
+            setTimeout(() => {
+                if (trail.parentNode) {
+                    trail.parentNode.removeChild(trail);
+                }
+            }, 500);
+        }
+        
+        // Scroll indicator functionality
+        function updateScrollIndicator() {
+            const sections = document.querySelectorAll('[id^="story"], #main-quote');
+            const dots = document.querySelectorAll('.scroll-dot');
+            const scrollPosition = window.scrollY + window.innerHeight / 2;
+            
+            sections.forEach((section, index) => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    dots.forEach(dot => dot.classList.remove('active'));
+                    if (dots[index]) {
+                        dots[index].classList.add('active');
                     }
                 }
-            }, { once: true, passive: true });
+            });
         }
-
-        // Initialize everything
-        function init() {
-            createStars();
-            createHeartRain();
-            
-            // Start animations with intervals
-            setInterval(createFallingMessage, messageInterval);
-            setInterval(createSpecialHeart, heartInterval);
-            setInterval(createSparkle, sparkleInterval);
-        }
-
-        // Wait for DOM and start
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
-
-        // Cleanup on page unload
-        window.addEventListener('beforeunload', () => {
-            isGyroEnabled = false;
-        });
-
-        // Handle visibility change to pause/resume animations
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                // Pause heavy animations when page is hidden
-                document.querySelectorAll('.message, .heart-special, .sparkle').forEach(el => {
-                    el.style.animationPlayState = 'paused';
-                });
-            } else {
-                // Resume animations when page is visible
-                document.querySelectorAll('.message, .heart-special, .sparkle').forEach(el => {
-                    el.style.animationPlayState = 'running';
+        
+        // Smooth scroll to section
+        function scrollToSection(targetId) {
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
                 });
             }
+        }
+        
+        // Parallax effect cho floating elements
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+            const floatingElements = document.querySelectorAll('.floating-element');
+            
+            floatingElements.forEach((element, index) => {
+                const speed = 0.2 + (index % 3) * 0.1;
+                const yPos = -(scrolled * speed);
+                element.style.transform += ` translateY(${yPos}px)`;
+            });
+        }
+        
+        // Reveal animation on scroll
+        function revealOnScroll() {
+            const elements = document.querySelectorAll('.story-chapter');
+            const windowHeight = window.innerHeight;
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.style.animationPlayState = 'running';
+                }
+            });
+        }
+        
+        // Typing effect cho quotes
+        function typeWriterEffect(element, text, speed = 30) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+        
+        // Enhanced hover effects
+        function enhanceHoverEffects() {
+            const storyChapters = document.querySelectorAll('.story-chapter');
+            
+            storyChapters.forEach(chapter => {
+                chapter.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                    this.style.boxShadow = '0 25px 50px rgba(135, 206, 235, 0.2), 0 0 30px rgba(135, 206, 235, 0.1)';
+                    this.style.borderColor = 'rgba(135, 206, 235, 0.4)';
+                });
+                
+                chapter.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                    this.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)';
+                    this.style.borderColor = 'rgba(135, 206, 235, 0.2)';
+                });
+            });
+        }
+        
+        // Audio visualization effect (visual only)
+        function createAudioVisualization() {
+            const bars = 20;
+            const container = document.createElement('div');
+            container.style.position = 'fixed';
+            container.style.bottom = '20px';
+            container.style.left = '20px';
+            container.style.display = 'flex';
+            container.style.alignItems = 'end';
+            container.style.height = '60px';
+            container.style.opacity = '0.3';
+            container.style.zIndex = '1000';
+            
+            for (let i = 0; i < bars; i++) {
+                const bar = document.createElement('div');
+                bar.style.width = '3px';
+                bar.style.backgroundColor = '#87ceeb';
+                bar.style.margin = '0 1px';
+                bar.style.borderRadius = '2px';
+                bar.style.height = Math.random() * 40 + 10 + 'px';
+                bar.style.animation = `audioBar ${Math.random() * 1 + 0.5}s ease-in-out infinite alternate`;
+                container.appendChild(bar);
+            }
+            
+            document.body.appendChild(container);
+            
+            // Add CSS animation for audio bars
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes audioBar {
+                    0% { height: 10px; opacity: 0.3; }
+                    100% { height: 50px; opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Event listeners và khởi tạo
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            createRain();
+            createParticles();
+            enhanceHoverEffects();
+            createAudioVisualization();
+            
+            // Mouse trail
+            let mouseTrailTimeout;
+            document.addEventListener('mousemove', function(e) {
+                clearTimeout(mouseTrailTimeout);
+                mouseTrailTimeout = setTimeout(() => createMouseTrail(e), 10);
+            });
+            
+            // Scroll events
+            window.addEventListener('scroll', function() {
+                updateScrollIndicator();
+                updateParallax();
+                revealOnScroll();
+            });
+            
+            // Scroll indicator clicks
+            const scrollDots = document.querySelectorAll('.scroll-dot');
+            scrollDots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    scrollToSection(targetId);
+                });
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    window.scrollBy({ top: window.innerHeight / 2, behavior: 'smooth' });
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    window.scrollBy({ top: -window.innerHeight / 2, behavior: 'smooth' });
+                }
+            });
+            
+            // Auto-scroll hint
+            setTimeout(() => {
+                const hint = document.createElement('div');
+                hint.innerHTML = '↓ Cuộn xuống để đọc câu chuyện ↓';
+                hint.style.position = 'fixed';
+                hint.style.bottom = '30px';
+                hint.style.left = '50%';
+                hint.style.transform = 'translateX(-50%)';
+                hint.style.color = 'rgba(135, 206, 235, 0.7)';
+                hint.style.fontSize = '1rem';
+                hint.style.animation = 'pulse 2s infinite';
+                hint.style.zIndex = '1000';
+                hint.style.pointerEvents = 'none';
+                document.body.appendChild(hint);
+                
+                setTimeout(() => {
+                    hint.style.opacity = '0';
+                    hint.style.transition = 'opacity 1s';
+                    setTimeout(() => hint.remove(), 1000);
+                }, 5000);
+            }, 3000);
+            
+            // Add pulse animation
+            const pulseStyle = document.createElement('style');
+            pulseStyle.textContent = `
+                @keyframes pulse {
+                    0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+                    50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+                }
+            `;
+            document.head.appendChild(pulseStyle);
+        });
+        
+        // Performance optimization: throttle scroll events
+        let ticking = false;
+        
+        function updateOnScroll() {
+            updateScrollIndicator();
+            updateParallax();
+            revealOnScroll();
+            ticking = false;
+        }
+        
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                requestAnimationFrame(updateOnScroll);
+                ticking = true;
+            }
+        });
+        
+        // Resize handler
+        window.addEventListener('resize', function() {
+            // Recreate particles on resize for better responsive behavior
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach(particle => particle.remove());
+            createParticles();
         });
     </script>
 </body>
