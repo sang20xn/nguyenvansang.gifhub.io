@@ -558,6 +558,50 @@
             #candle2 { top: -25px; left: 0px; }
             #candle3 { top: -20px; left: 15px; }
         }
+        .photo-gallery {
+    text-align: center;
+    margin: 20px auto;
+    max-width: 900px;
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.photo-grid img {
+    width: 100%;
+    height: 150px;         /* thumbnail nhỏ gọn */
+    object-fit: cover;     /* cắt ảnh cho đều */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.photo-grid img:hover {
+    transform: scale(1.05);
+}
+
+/* Lightbox */
+#lightbox {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+#lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    border: 4px solid #fff;
+    border-radius: 10px;
+}
     </style>
 </head>
 <body>
@@ -586,32 +630,47 @@
         </div>
 
         <div class="music-controls">
-            <h3>🎵 Thêm nhạc nền cho buổi tiệc 🎵</h3>
-            <input type="file" id="musicUpload" accept="audio/*" style="display: none;">
-            <button class="upload-btn" onclick="document.getElementById('musicUpload').click();">
-                🎶 Tải nhạc lên
-            </button>
-            <button class="upload-btn" id="playPauseBtn" onclick="toggleMusic()" disabled>
-                ▶️ Phát nhạc
-            </button>
-            <div class="volume-control">
-                <label>🔊 Âm lượng: </label>
-                <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.1" value="0.5">
-            </div>
-            <div class="music-info" id="musicInfo"></div>
-            <audio id="backgroundMusic" loop></audio>
-        </div>
+    <h3>🎵 Nhạc nền cho buổi tiệc 🎵</h3>
+    
+    <!-- Nút phát / tạm dừng -->
+    <button class="upload-btn" id="playPauseBtn" onclick="toggleMusic()">
+        ▶️ Phát nhạc
+    </button>
+
+    <!-- Thanh điều chỉnh âm lượng -->
+    <div class="volume-control">
+        <label>🔊 Âm lượng: </label>
+        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.1" value="0.5">
+    </div>
+
+    <div class="music-info" id="musicInfo">🎶 Đang phát: Happy Party Song</div>
+
+    <!-- Nhạc nền gắn sẵn -->
+    <audio id="backgroundMusic" src="img/Sinh nhật vui vẻ nha em.mp3" loop></audio>
+</div>
 
         <div class="photo-gallery">
-            <h3 class="gallery-title">📷 Album Kỷ Niệm Của Vy 📷</h3>
-            <div class="photo-upload-area" onclick="document.getElementById('photoUpload').click();">
-                <h4>🖼️ Thêm hình ảnh của Vy</h4>
-                <p>Nhấn vào đây để tải ảnh lên từ laptop</p>
-                <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">Hỗ trợ: JPG, PNG, GIF - Nhấn vào ảnh để xem lớn</p>
-                <input type="file" id="photoUpload" accept="image/*" multiple style="display: none;">
-            </div>
-            <div class="photo-grid" id="photoGrid"></div>
-        </div>
+    <h3 class="gallery-title">📷 Album Hình Ảnh Của Vy 📷</h3>
+
+    <!-- Bỏ phần upload, chỉ giữ gallery -->
+    <div class="photo-grid" id="photoGrid">
+        <!-- Gắn ảnh trực tiếp -->
+        <img src="img/h1.jpg" alt="Kỷ niệm 1" onclick="openImage(this)">
+        <img src="img/h3.jpg" alt="Kỷ niệm 2" onclick="openImage(this)">
+        <img src="img/h11.jpg" alt="Kỷ niệm 3" onclick="openImage(this)">
+        <img src="img/h12.jpg" alt="Kỷ niệm 1" onclick="openImage(this)">
+        <img src="img/h6.jpg" alt="Kỷ niệm 2" onclick="openImage(this)">
+        <img src="img/h7.jpg" alt="Kỷ niệm 3" onclick="openImage(this)">
+        <img src="img/h8.jpg" alt="Kỷ niệm 2" onclick="openImage(this)">
+        <img src="img/h9.jpg" alt="Kỷ niệm 3" onclick="openImage(this)">
+    </div>
+</div>
+
+<!-- Lightbox để xem ảnh lớn -->
+<div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+    background:rgba(0,0,0,0.8); justify-content:center; align-items:center;">
+    <img id="lightbox-img" src="" style="max-width:90%; max-height:90%;">
+</div>
 
         <!-- Wish Section (replacing Game Section) -->
         <div class="wish-interactive-section">
@@ -626,7 +685,7 @@
         </div>
 
         <div class="wishes-section">
-            <h3 class="wishes-title">💝 LỜI CHÚC TỪ TRÁI TIM 💝</h3>
+            <h3 class="wishes-title">💝 LỜI CHÚC ĐẶC BIỆT 💝</h3>
             
             <div class="wish-card">
                 <strong>🌟 Chúc em gái Thảo Vy sinh nhật thật vui vẻ và hạnh phúc! 🌟</strong><br>
@@ -642,7 +701,7 @@
 
             <div class="wish-card">
                 <strong>🎯 Chúc em luôn kiên trì và đạt được mọi mục tiêu! 🎯</strong><br>
-                17 tuổi là độ tuổi tuyệt vời nhất, chúc em có thật nhiều kỷ niệm đẹp, 
+                18 tuổi là độ tuổi tuyệt vời nhất, chúc em có thật nhiều kỷ niệm đẹp, 
                 những tình bạn chân thành và thành công trong mọi việc em làm!
             </div>
 
@@ -654,7 +713,7 @@
 
             <div class="wish-card">
                 <strong>🎊 Sinh nhật năm nay thật đặc biệt và ý nghĩa! 🎊</strong><br>
-                Chúc Võ Nguyễn Thảo Vy có một tuổi mới thật nhiều niềm vui, 
+                Chúc em có một tuổi mới thật nhiều niềm vui, 
                 thành công rực rỡ và luôn được yêu thương bởi gia đình và bạn bè!
             </div>
         </div>
@@ -1001,5 +1060,17 @@
             }, 2000);
         });
     </script>
+    <script>
+function openImage(img) {
+    document.getElementById("lightbox").style.display = "flex";
+    document.getElementById("lightbox-img").src = img.src;
+}
+
+// Tắt khi bấm ra ngoài
+document.getElementById("lightbox").onclick = function() {
+    this.style.display = "none";
+};
+</script>
+    
 </body>
 </html>
